@@ -40,6 +40,7 @@ const Login = () => {
 
     try {
       await login(email, password);
+      Alert.alert("Login Success..!")
       //router.replace("/home")
     } catch (e) {
       console.error(e);
@@ -51,7 +52,7 @@ const Login = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View className="flex-1 bg-[#F3E5F5]">
+      <View className="flex-1 bg-[#FFF8F3]">
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           className="flex-1"
@@ -64,24 +65,30 @@ const Login = () => {
           >
             <View className="h-80 mb-7 justify-center items-center">
               <Image
-                source={require("../../assets/images/i1.png")}
+                source={require("../../assets/images/barista01.png")}
                 className="w-80 h-80"
                 resizeMode="contain"
               />
             </View>
 
-            <Text className="text-3xl font-bold text-center text-[#4A148C] mb-10">
-              Welcome Back
-            </Text>
+            <View className="items-center gap-1 mb-10">
+  <Text className="text-3xl font-bold text-[#4A3428] text-center">
+    Ready to Cook?
+  </Text>
 
+  <Text className="text-[#9A8478] text-center text-base">
+    Unlock your saved recipes
+  </Text>
+</View>
+            
             {/* FORM CONTAINER */}
             <View className="flex-1">
               {/* Email Input */}
               <View className="mb-5">
                 <TextInput
-                  className="text-base text-[#4A148C] px-5 py-4 bg-[#F3E5F5] rounded-lg border border-[#D1C4E9]"
-                  placeholder="Enter email"
-                  placeholderTextColor="#999"
+                  className="text-base text-[#4A3428] px-5 py-4 bg-[#FFF8F3] rounded-lg border border-[#E5D3B7]"
+                  placeholder="Email Address"
+                  placeholderTextColor="#9A8478"
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -92,9 +99,9 @@ const Login = () => {
               {/* PASSWORD INPUT */}
               <View className="mb-5 relative">
                 <TextInput
-                  className="text-base text-[#4A148C] px-5 py-4 bg-[#F3E5F5] rounded-lg border border-[#D1C4E9]"
-                  placeholder="Enter password"
-                  placeholderTextColor="#999"
+                  className="text-base text-[#4A3428] px-5 py-4 bg-[#FFF8F3] rounded-lg border border-[#E5D3B7]"
+                  placeholder="Password"
+                  placeholderTextColor="#9A8478"
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -107,13 +114,13 @@ const Login = () => {
                   <Ionicons
                     name={showPassword ? "eye-outline" : "eye-off-outline"}
                     size={20}
-                    color="#999"
+                    color="#9A8478"
                   />
                 </TouchableOpacity>
               </View>
 
               <TouchableOpacity
-                className={`bg-[#6A1B9A] py-4 rounded-lg mt-5 mb-7 ${isLoading ? "opacity-70" : ""}`}
+                className={`bg-[#8B593E] py-4 rounded-lg mt-5 mb-7 ${isLoading ? "opacity-70" : ""}`}
                 onPress={handleLogin}
                 disabled={isLoading}
                 activeOpacity={0.8}
@@ -124,15 +131,19 @@ const Login = () => {
               </TouchableOpacity>
 
               {/* Sign Up Link */}
-              <TouchableOpacity
-                className="items-center pb-5"
-                onPress={() => router.push("/(auth)/login")}
-              >
-                <Text className="text-base text-[#999]">
-                  Don't have an account?{" "}
-                  <Text className="text-[#6A1B9A] text-base font-medium">Sign up</Text>
-                </Text>
-              </TouchableOpacity>
+              <View className="flex-row justify-center pb-5">
+                              <Text className="text-base text-[#9A8478]">
+                                Don't have an account? </Text>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  router.push("/register")
+                                }}
+                              >
+                                <Text className="text-[#8B593E] text-base font-medium">
+                                  Sign In
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
