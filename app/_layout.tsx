@@ -15,7 +15,7 @@ const RootLayout = () => {
     // <SafeAreaView className="flex-1">
     <LoaderProvider>
       <AuthProvider>
-        <View style={{ marginTop: insets.top, flex: 1 }}>
+        <View style={{ marginTop: insets.top, flex: 1, backgroundColor: "#FFF8F3" }}>
           <Slot />
         </View>
       </AuthProvider>

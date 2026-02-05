@@ -9,14 +9,14 @@ const Index = () => {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-gray-50">
-        <ActivityIndicator size="large" color="#4ade80" />
+        <ActivityIndicator size="large" color="#720b0b" />
       </View>
     )
   }
 
   if (user) {
-    //return <Redirect href="/home" />
-    return <Redirect href="/login" />
+    return <Redirect href="/recipes" />
+    //return <Redirect href="/register" />   // just for now
   } else {
     return <Redirect href="/login" />
   }
