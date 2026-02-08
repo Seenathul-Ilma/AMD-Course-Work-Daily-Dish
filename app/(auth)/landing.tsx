@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
-import { Marquee } from "@animatereactnative/marquee";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import useFont from "@/hooks/useFont";
+import { Marquee } from "@animatereactnative/marquee";
 import { useRouter } from "expo-router";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Landing() {
   const router = useRouter();
@@ -11,19 +11,24 @@ export default function Landing() {
   const fontsLoaded = useFont();
 
   if (!fontsLoaded) {
-    return null;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF8F3' }}>
+        {/* You can add a loading indicator here if desired */}
+        <Text style={{ fontFamily: 'System', fontSize: 18 }}>Loading...</Text>
+      </View>
+    );
   }
 
   const imageList = [
-    require("./../assets/images/1.jpg"),
-    require("./../assets/images/2.jpg"),
-    require("./../assets/images/5.jpg"),
-    require("./../assets/images/7.jpg"),
-    require("./../assets/images/9.jpg"),
-    require("./../assets/images/10.jpg"),
-    require("./../assets/images/11.jpg"),
-    require("./../assets/images/14.jpg"),
-    require("./../assets/images/15.jpg"),
+    require("./../../assets/images/1.jpg"),
+    require("./../../assets/images/2.jpg"),
+    require("./../../assets/images/5.jpg"),
+    require("./../../assets/images/7.jpg"),
+    require("./../../assets/images/9.jpg"),
+    require("./../../assets/images/10.jpg"),
+    require("./../../assets/images/11.jpg"),
+    require("./../../assets/images/14.jpg"),
+    require("./../../assets/images/15.jpg"),
   ];
 
   //const infiniteImages = [...imageList01, ...imageList01];
@@ -53,8 +58,8 @@ export default function Landing() {
 
         <Marquee
           spacing={10}
-          speed={0.6}
-          //reverse={true}
+          speed={0.4}
+          reverse={true}
           style={{
             transform: [{ rotate: "-4deg" }],
             marginTop: 10,
@@ -69,7 +74,7 @@ export default function Landing() {
 
         <Marquee
           spacing={10}
-          speed={0.9}
+          speed={0.8}
           //reverse={false}
           style={{
             transform: [{ rotate: "-4deg" }],
@@ -113,19 +118,18 @@ export default function Landing() {
           Generate delicious recipes in seconds with the power of AI
         </Text>
 
-        <View className="bg-[#8B593E] py-4 rounded-lg mt-5 mb-7">
-          <Pressable
-          onPress={() => {
-            router.push("/register");
-          }}
-          style={({ pressed }) => ({
-            opacity: pressed ? 0.8 : 1,
-          })}
-        >
-          <Text className="text-white text-base font-semibold text-center">
-            Get Started
-          </Text>
-        </Pressable>
+        <View className="bg-[#8B593E] py-3 rounded-3xl mt-7 mb-7">
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/register");
+            }}
+          >
+            <Text style={{
+            fontFamily: "outfit-semibold"
+          }} className="text-white text-lg text-center">
+              Get Started
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </GestureHandlerRootView>

@@ -1,27 +1,31 @@
-import { View, Text } from "react-native"
-import React from "react"
-import { Slot } from "expo-router"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
-import { LoaderProvider } from "@/context/LoaderContext"
-import { AuthProvider } from "@/context/AuthContext"
+import { View } from "react-native";
+import { Slot } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
-// App.tsx ->
+import { LoaderProvider } from "@/context/LoaderContext";
+import { AuthProvider } from "@/context/AuthContext";
+
 const RootLayout = () => {
-  const insets = useSafeAreaInsets()
-
-  console.log(insets)
+  const insets = useSafeAreaInsets();
 
   return (
-    // <SafeAreaView className="flex-1">
-    <LoaderProvider>
-      <AuthProvider>
-        <View style={{ marginTop: insets.top, flex: 1, backgroundColor: "#FFF8F3" }}>
-          <Slot />
-        </View>
-      </AuthProvider>
-    </LoaderProvider>
-    // </SafeAreaView>
-  )
-}
+    <KeyboardProvider>
+      <LoaderProvider>
+        <AuthProvider>
+          <View
+            style={{
+              marginTop: insets.top,
+              flex: 1,
+              backgroundColor: "#FFF8F3",
+            }}
+          >
+            <Slot />
+          </View>
+        </AuthProvider>
+      </LoaderProvider>
+    </KeyboardProvider>
+  );
+};
 
-export default RootLayout
+export default RootLayout;

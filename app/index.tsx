@@ -15,8 +15,8 @@ const Index = () => {
   }
 
   if (user) {
-    return <Redirect href="/landing" />
-    //return <Redirect href="/register" />   // just for now
+    //return <Redirect href="/landing" />
+    return <Redirect href="/register" />   // only for now
   } else {
     //return <Redirect href="/login" />
     return <Redirect href="/login" />
