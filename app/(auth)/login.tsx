@@ -140,7 +140,7 @@ const Login = () => {
                                 }}
                               >
                                 <Text className="text-[#8B593E] text-base font-medium">
-                                  Sign In
+                                  Sign Up
                                 </Text>
                               </TouchableOpacity>
                             </View>

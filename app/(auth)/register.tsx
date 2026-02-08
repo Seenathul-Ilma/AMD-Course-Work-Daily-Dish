@@ -165,7 +165,7 @@ const Register = () => {
                 })}
               >
                 <Text className="text-white text-base font-semibold text-center">
-                  {isLoading ? "Signing In..." : "Sign In"}
+                  {isLoading ? "Signing Up..." : "Sign Up"}
                 </Text>
               </Pressable>
 
