@@ -2,9 +2,9 @@ import { Tabs } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 
 const tabs = [
-  { name: "recipes", icon: "restaurant", title: "Meals" },
-  { name: "search", icon: "search", title: "Explore" },
-  { name: "favourites", icon: "heart", title: "Loved" },
+  { name: "home", icon: "home", title: "Home" },
+  { name: "cookbook", icon: "restaurant", title: "Meals" },
+  { name: "explore", icon: "search", title: "Explore" },
   { name: "profile", icon: "person", title: "You" },
 ] as const
 
