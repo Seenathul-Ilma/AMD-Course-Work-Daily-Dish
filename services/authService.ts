@@ -17,11 +17,23 @@ export const registerUser = async (
         email,
         password
     )
-    await updateProfile(userCredential.user, { displayName: fullname })
+
+    const usernamefirstLetter = fullname.trim().charAt(0).toUpperCase()
+
+    const profileImage =
+    "https://ui-avatars.com/api/?name=" +
+    usernamefirstLetter +
+    "&background=8B593E&color=FFF8F3"
+
+    await updateProfile(userCredential.user, { 
+        displayName: fullname ,
+        photoURL: profileImage
+    })
     await setDoc(doc(db, "users", userCredential.user.uid), {
         name: fullname,
         role: "",
         email,
+        profileImage,
         createdAt: new Date()
     })
     return userCredential.user

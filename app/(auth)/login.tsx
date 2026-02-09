@@ -44,7 +44,7 @@ const Login = () => {
     try {
       await login(email, password);
       Alert.alert("Login Success..!");
-      //router.replace("/favourites")
+      router.replace("/home")
     } catch (e) {
       console.error(e);
       Alert.alert("Login failed. Please try again.");

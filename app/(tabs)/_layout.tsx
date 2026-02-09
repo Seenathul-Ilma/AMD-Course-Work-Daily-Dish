@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
+import useFont from "@/hooks/useFont";
 
 const tabs = [
   { name: "home", icon: "home", title: "Home" },
@@ -9,6 +10,12 @@ const tabs = [
 ] as const
 
 const TabsLayout = () => {
+  const fontsLoaded = useFont();
+
+    if (!fontsLoaded) {
+      return;
+    }
+
   return (
     <Tabs
       screenOptions={{
@@ -26,6 +33,7 @@ const TabsLayout = () => {
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
+          fontFamily: 'outfit-medium'
         },
       }}
     >

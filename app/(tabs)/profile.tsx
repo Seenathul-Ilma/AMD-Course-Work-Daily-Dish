@@ -4,7 +4,10 @@ import React from 'react'
 
 const Profile = () => {
   return (
-    <View>
+    <View style={{
+      height: '100%',
+      backgroundColor: '#FFF8F3'
+    }}>
       <Text>Profile</Text>
     </View>
   )
