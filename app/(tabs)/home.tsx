@@ -1,13 +1,14 @@
-import { View, Text } from 'react-native'
+import { ScrollView } from 'react-native'
 import React from 'react'
 import IntoHeader from '@/components/IntoHeader'
+import CreateRecipe from '@/components/CreateRecipe'
 
 const Home = () => {
 
   return (
-    <View style={{
+    <ScrollView style={{
       height: '100%',
-      backgroundColor: '#FFF8F3',
+      backgroundColor: '#FFFFFF',
       padding: 20
     }}>
 
@@ -15,10 +16,11 @@ const Home = () => {
       <IntoHeader />
 
       {/* Recipe Generator UI */}
+      <CreateRecipe />
       
       {/* Category */}
 
-    </View>
+    </ScrollView>
   )
 }
 
