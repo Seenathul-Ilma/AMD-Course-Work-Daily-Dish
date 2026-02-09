@@ -2,6 +2,7 @@ import { ScrollView } from 'react-native'
 import React from 'react'
 import IntoHeader from '@/components/IntoHeader'
 import CreateRecipe from '@/components/CreateRecipe'
+import CategoryList from '@/components/CategoryList'
 
 const Home = () => {
 
@@ -19,6 +20,7 @@ const Home = () => {
       <CreateRecipe />
       
       {/* Category */}
+      <CategoryList />
 
     </ScrollView>
   )
