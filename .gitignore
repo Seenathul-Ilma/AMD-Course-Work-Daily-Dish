@@ -3,6 +3,13 @@
 # dependencies
 node_modules/
 
+# dotenv environment variable files
+.env
+.env.local
+.env.production
+.env.*
+!.env.example
+
 # Expo
 .expo/
 dist/

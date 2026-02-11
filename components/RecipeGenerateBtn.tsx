@@ -1,8 +1,8 @@
-import { Text, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Ionicons } from "@expo/vector-icons"
 
-const RecipeGenerateBtn = ({label, onPress}:any) => {
+const RecipeGenerateBtn = ({label, onPress, isLoading=false}:any) => {
     
   return (
     <TouchableOpacity
@@ -19,7 +19,7 @@ const RecipeGenerateBtn = ({label, onPress}:any) => {
                     justifyContent: 'center'
                 }}
               >
-                <Ionicons name="sparkles" size={24} color="#FFFFFF" />
+                {isLoading ? <ActivityIndicator  size={24} color="#FFFFFF" /> : <Ionicons name="sparkles" size={24} color="#FFFFFF" />}
                 <Text style={{
                 fontFamily: "outfit-semibold"
               }} className="text-white text-lg text-center">

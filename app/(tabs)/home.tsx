@@ -4,8 +4,7 @@ import IntoHeader from '@/components/IntoHeader'
 import CreateRecipe from '@/components/CreateRecipe'
 import CategoryList from '@/components/CategoryList'
 
-const Home = () => {
-
+export default function Home() {
   return (
     <ScrollView style={{
       height: '100%',
@@ -26,4 +25,23 @@ const Home = () => {
   )
 }
 
-export default Home
+/* const Home = () => {
+
+  return (
+    <ScrollView style={{
+      height: '100%',
+      backgroundColor: '#FFFFFF',
+      padding: 20
+    }}>
+
+      <IntoHeader />
+
+      <CreateRecipe />
+      
+      <CategoryList />
+
+    </ScrollView>
+  )
+}
+
+export default Home */
