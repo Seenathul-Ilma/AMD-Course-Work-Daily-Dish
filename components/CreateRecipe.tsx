@@ -11,6 +11,7 @@ import { useLoader } from "@/hooks/useLoader";
 
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import LoadingDialog from "./LoadingDialog";
+import { addRecipe } from "@/services/recipeService";
 
 //dotenv.config();
 
@@ -142,10 +143,10 @@ const CreateRecipe = () => {
       console.log("Parsed JSON: ", parsedContent);
 
       console.log(parsedContent?.imagePrompt)
-      await GenerateAiImage(parsedContent?.imagePrompt)
+      const imageUrl = await GenerateAiImage(parsedContent?.imagePrompt)
 
-      //generatedContent && setGeneratedRecipeOptions(parsedData);
-      //actionSheetRef.current?.show();
+      const insertedRecordResult = await SaveToDb(parsedContent,imageUrl)
+
     } catch (error: any) {
       if (error.response?.status === 429) {
         Alert.alert("Too many requests. Please wait a moment and try again.");
@@ -179,6 +180,12 @@ const CreateRecipe = () => {
 const GenerateAiImage= async (imagePrompt:string)=>{
   const result = await GenerateRecipeImage(imagePrompt)
   console.log(result.data.image) //Output Result: Base 64 Image
+  return result.data.image
+}
+
+const SaveToDb = async (content:Recipe, imageUrl:string) => {
+  await addRecipe(content, imageUrl)
+  Alert.alert("Success", "Recipe added successfully")
 }
 
   return (

@@ -10,6 +10,7 @@ export interface RecipeStep {
 }
 
 export interface Recipe {
+  id: string
   recipeName: string;
   description: string;
   imagePrompt: string;
