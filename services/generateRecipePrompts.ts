@@ -32,6 +32,7 @@ export default {
         {
             "recipeName": "recipe name",
             "description": "description",
+            "category": ["Breakfast", "Dinner"],
             "ingredients": [
                 {
                     "icon": "emoji representing ingredient",
@@ -52,7 +53,7 @@ export default {
             "calories": number,
             "cookTime": number,
             "serveTo": number,
-            "imagePrompt": "A highly realistic food photography prompt that visually describes the final dish exactly as prepared in this recipe. Include color, texture, plating style, garnish, lighting, camera angle, background setting, and serving style. The image should match the actual ingredients and cooking method.",
+            "imagePrompt": "A highly realistic food photography prompt that visually describes the final dish exactly as prepared in this recipe. Include color, texture, plating style, garnish, lighting, camera angle, background setting, and serving style. The image should match the actual ingredients and cooking method."
         }
 
         Rules:
@@ -62,6 +63,9 @@ export default {
         - Serving number as serveTo must be number only.
         - steps must be clear and sequential (each step with step number and instruction).
         - Image prompt must describe the exact final dish realistically (like a professional food photography prompt).
+        - category must be an array of one or more values selected ONLY from: [Breakfast, Lunch, Dinner, Salad, Dessert, Fastfood, Drink, Cake]
+        - Do not create new categories.
+        - Ensure valid JSON. Do not add trailing commas.
         - Return only valid JSON.
     `,
 };
