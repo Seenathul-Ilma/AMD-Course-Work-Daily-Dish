@@ -1,5 +1,5 @@
 export default {
-    GENERATE_OPTION_PROMPT: `
+  GENERATE_OPTION_PROMPT: `
         Based on the user instruction, generate exactly 3 different recipe variants.
 
         Return response in STRICT JSON format only.
@@ -22,7 +22,7 @@ export default {
         - Return only valid JSON array.
     `,
 
-    GENERATE_COMPLETE_RECIPE: `
+  GENERATE_COMPLETE_RECIPE: `
         Based on the given recipe name and description, generate a complete recipe.
 
         Return response in STRICT JSON format only.
@@ -30,24 +30,38 @@ export default {
 
         JSON structure:
         {
+            "recipeName": "recipe name",
+            "description": "description",
             "ingredients": [
                 {
-                    "icon": "emoji",
+                    "icon": "emoji representing ingredient",
                     "ingredient": "ingredient name",
-                    "quantity": "quantity with unit"
+                    "quantity": "exact quantity with measurement"
                 }
             ],
-            "steps": ["Step 1", "Step 2", "Step 3"],
+            "steps": [
+                {
+                    "step": 1,
+                    "instruction": ""
+                },
+                {
+                    "step": 2,
+                    "instruction": ""
+                }
+            ],
             "calories": number,
             "cookTime": number,
-            "serveTo": number
+            "serveTo": number,
+            "imagePrompt": "A highly realistic food photography prompt that visually describes the final dish exactly as prepared in this recipe. Include color, texture, plating style, garnish, lighting, camera angle, background setting, and serving style. The image should match the actual ingredients and cooking method.",
         }
 
         Rules:
-        - calories must be number only.
-        - cookTime must be total minutes as number.
-        - serveTo must be number only.
-        - steps must be clear and sequential.
+        - emoji icons for each ingredient as icon, quantity as quantity, along with step by step recipe as steps  
+        - Total Calories as calories must be number only.
+        - Minutes to cook as cookTime must be total minutes as number.
+        - Serving number as serveTo must be number only.
+        - steps must be clear and sequential (each step with step number and instruction).
+        - Image prompt must describe the exact final dish realistically (like a professional food photography prompt).
         - Return only valid JSON.
-    `
-}
+    `,
+};

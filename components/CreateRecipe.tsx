@@ -1,32 +1,35 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 //import OpenAI from "openai"
 import RecipeGenerateBtn from "./RecipeGenerateBtn";
 
-import prompt from "@/services/generateRecipePrompts";
+import recipePrompt from "@/services/generateRecipePrompts";
 import { RecipeOption } from "@/types/recipeOption";
+import { Recipe } from "@/types/recipe";
 import { useLoader } from "@/hooks/useLoader";
 
-import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet"
-
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import LoadingDialog from "./LoadingDialog";
 
 //dotenv.config();
 
 const EXPO_PUBLIC_GEMINI_API_KEY = process.env
   .EXPO_PUBLIC_GEMINI_API_KEY as string;
 
+const EXPO_PUBLIC_AIGURULAB_API_KEY = process.env.EXPO_PUBLIC_AIGURULAB_API_KEY as string
+
+  const AIGURULAB_BASE_URL='https://aigurulab.tech';
+
 const CreateRecipe = () => {
   const [userInputText, setUserInputText] = useState<string>();
   const { showLoader, hideLoader, isLoading } = useLoader();
-
-  const [generatedRecipeOptions, setGeneratedRecipeOptions] = useState()
+  const [openLoading, setOpenLoading] = useState(false);
+  const [generatedRecipeOptions, setGeneratedRecipeOptions] = useState<any>([]);
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-
   const onGenerateRecipe = async () => {
-
-    const GENERATE_OPTION_PROMPT = prompt.GENERATE_OPTION_PROMPT
+    const GENERATE_OPTION_PROMPT = recipePrompt.GENERATE_OPTION_PROMPT;
 
     if (!userInputText || userInputText.trim() == "") {
       Alert.alert("Please enter your ingredients..!");
@@ -67,8 +70,8 @@ const CreateRecipe = () => {
         aiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
         "No description generated";
 
-      console.log("Original: " + generatedContent);
-      console.log("Trimmed: " + generatedContent.trim());
+      //console.log("Original: " + generatedContent);
+      //console.log("Trimmed: " + generatedContent.trim());
 
       if (!generatedContent) {
         Alert.alert("No recipe generated.");
@@ -76,8 +79,10 @@ const CreateRecipe = () => {
       }
 
       const parsedData: RecipeOption[] = JSON.parse(generatedContent);
-      console.log("Parsed JSON: ", parsedData);
+      //console.log("Parsed JSON: ", parsedData);
 
+      generatedContent && setGeneratedRecipeOptions(parsedData);
+      actionSheetRef.current?.show();
     } catch (error: any) {
       if (error.response?.status === 429) {
         Alert.alert("Too many requests. Please wait a moment and try again.");
@@ -87,9 +92,94 @@ const CreateRecipe = () => {
 
       console.log("API Error:", error.response?.data || error.message);
     } finally {
-        hideLoader()
+      hideLoader();
     }
   };
+
+  const GenerateCompleteRecipe = async (option: any) => {
+    actionSheetRef.current?.hide()
+    setOpenLoading(true)
+
+    const GENERATE_COMPLETE_RECIPE = recipePrompt.GENERATE_COMPLETE_RECIPE;
+
+    try {
+      // Call Gemini API
+      const aiResponse = await axios.post(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
+        {
+          contents: [
+            {
+              parts: [{ text: "RecipeName:" + option?.recipeName + "Description:" + option?.description + GENERATE_COMPLETE_RECIPE }],
+            },
+          ],
+          generationConfig: {
+            maxOutputTokens: 1500,
+            response_mime_type: "application/json",
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-goog-api-key": EXPO_PUBLIC_GEMINI_API_KEY,
+          },
+        },
+      );
+
+      const generatedContent: any =
+        aiResponse.data?.candidates?.[0]?.content?.[0]?.text ||
+        aiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "No description generated";
+
+      console.log("Original: " + generatedContent);
+      //console.log("Trimmed: " + generatedContent.trim());
+
+      if (!generatedContent) {
+        Alert.alert("No recipe generated.");
+        return;
+      }
+
+      const parsedContent: Recipe = JSON.parse(generatedContent);
+      console.log("Parsed JSON: ", parsedContent);
+
+      console.log(parsedContent?.imagePrompt)
+      await GenerateAiImage(parsedContent?.imagePrompt)
+
+      //generatedContent && setGeneratedRecipeOptions(parsedData);
+      //actionSheetRef.current?.show();
+    } catch (error: any) {
+      if (error.response?.status === 429) {
+        Alert.alert("Too many requests. Please wait a moment and try again.");
+      } else {
+        Alert.alert("Something went wrong. Please try again.");
+      }
+
+      console.log("API Error:", error.response?.data || error.message);
+    } finally {
+      setOpenLoading(false)
+    }
+
+  };
+
+
+  const GenerateRecipeImage = async(imagePrompt: string) => await axios.post(AIGURULAB_BASE_URL+'/api/generate-image',
+        {
+            width: 1024,
+            height: 1024,
+            input: imagePrompt,
+            model: 'sdxl',//'flux'
+            aspectRatio:"1:1"//Applicable to Flux model only
+        },
+        {
+            headers: {
+                'x-api-key': EXPO_PUBLIC_AIGURULAB_API_KEY, // Your API Key
+                'Content-Type': 'application/json', // Content Type
+            },
+        })
+
+const GenerateAiImage= async (imagePrompt:string)=>{
+  const result = await GenerateRecipeImage(imagePrompt)
+  console.log(result.data.image) //Output Result: Base 64 Image
+}
 
   return (
     <View style={styles.container}>
@@ -115,15 +205,42 @@ const CreateRecipe = () => {
         label={isLoading ? "Generating..." : "Generate Recipe"}
         onPress={() => onGenerateRecipe()}
         isLoading={isLoading}
+        icon={"sparkles"}
         //disabled={isLoading}
       />
 
+      <LoadingDialog visible={openLoading} />
       <ActionSheet ref={actionSheetRef}>
-        <View>
-          
+        <View style={styles.actionSheetContainer}>
+          <Text style={styles.heading}>Select a recipe</Text>
+          <View>
+            {generatedRecipeOptions.map((recipe: any, index: any) => (
+              <TouchableOpacity
+              onPress={()=>GenerateCompleteRecipe(recipe)}
+              key={index} style={styles.recipeOptionContainer}>
+                <Text
+                  style={{
+                    fontFamily: "outfit-bold",
+                    fontSize: 15,
+                    color: "#4A3428",
+                  }}
+                >
+                  {recipe?.recipeName || "Classic Watalappan 🍮"}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "outfit-regular",
+                    color: "gray",
+                  }}
+                >
+                  {recipe?.description ||
+                    "A rich and creamy Sri Lankan dessert made with coconut milk and jaggery. It's infused with cardamom and nutmeg for a warm, aromatic flavor."}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </ActionSheet>
-
     </View>
   );
 };
@@ -166,6 +283,15 @@ const styles = StyleSheet.create({
     marginTop: 8,
     padding: 10,
     textAlignVertical: "top",
+  },
+  actionSheetContainer: {
+    padding: 25,
+  },
+  recipeOptionContainer: {
+    padding: 15,
+    borderWidth: 0.2,
+    borderRadius: 15,
+    marginTop: 15,
   },
 });
 
