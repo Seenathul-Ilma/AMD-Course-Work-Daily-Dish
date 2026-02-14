@@ -28,6 +28,7 @@ export default function Home() {
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
+      console.log(latestRecipes)
     }
   };
 
@@ -57,7 +58,7 @@ export default function Home() {
           {/* Category */}
           <CategoryList />
 
-          <LatestRecipes />
+          <LatestRecipes recipes={latestRecipes} />
         </ScrollView>
       }
     />

@@ -272,9 +272,9 @@ const generateRecipeHTML = (recipe: any) => {
 };
 
 const RecipeDetail = () => {
+      const router = useRouter();
   const { recipeData } = useLocalSearchParams();
   const recipe = JSON.parse(recipeData as string);
-  const router = useRouter();
 
   console.log("----", recipe);
 
@@ -443,13 +443,17 @@ Made with ❤️ from DailyDish
           <Ingredient ingredients={recipe?.ingredients} />
           <RecipeSteps steps={recipe?.steps} />
 
-            <Text style={{
-                marginTop: 15,
-                fontFamily: 'outfit-regular',
-                fontSize: 16,
-                textAlign: 'center',
-                color: 'gray'
-            }}>Ready to try another recipe?</Text>
+          <Text
+            style={{
+              marginTop: 15,
+              fontFamily: "outfit-regular",
+              fontSize: 16,
+              textAlign: "center",
+              color: "gray",
+            }}
+          >
+            Ready to try another recipe?
+          </Text>
           <TouchableWithoutFeedback
             onPress={Keyboard.dismiss}
             accessible={false}

@@ -1,32 +1,55 @@
-import { View, Text, FlatList, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import RecipeCard from '@/components/RecipeCard'
-import { Recipe } from '@/types/recipe';
-import { getAllRecipes, getUserCreatedRecipes } from '@/services/recipeService';
+import {
+  View,
+  Text,
+  FlatList,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import RecipeCard from "@/components/RecipeCard";
+import { Recipe } from "@/types/recipe";
+import { getAllRecipes, getUserCreatedRecipes } from "@/services/recipeService";
+import { Ionicons } from "@expo/vector-icons";
+import { getAllFavourites } from "@/services/userFavouriteService";
 
 const Cookbook = () => {
-    const [recipeList, setRecipeList] = useState<Recipe[]>([])
-    const [loading, setLoading] = useState(false)
-    //console.log("Category Name: ", categoryName)
-  
-    useEffect(() => {
-      GetUserCreatedRecipes()
-    }, [])
-  
-    const GetUserCreatedRecipes = async () => {
-      setLoading(true)
-      try{
-        let recipes: Recipe[] = [];
-        recipes = await getUserCreatedRecipes();
-        setRecipeList(recipes)
-        //console.log(recipes)
-      } catch (error: any) {
-  Alert.alert("Error", error?.message || "Something went wrong");
-            console.error('Error fetching recipes:', error)
-          } finally {
-            setLoading(false)
-          }
+  const [recipeList, setRecipeList] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState(1);
+
+  useEffect(() => {
+    GetUserCreatedRecipes();
+    UserFavouriteRecipeList();
+  }, []);
+
+  const GetUserCreatedRecipes = async () => {
+    setLoading(true);
+    try {
+      let recipes: Recipe[] = [];
+      recipes = await getUserCreatedRecipes();
+      setRecipeList(recipes);
+      //console.log(recipes)
+    } catch (error: any) {
+      Alert.alert("Error", error?.message || "Something went wrong");
+      console.error("Error fetching recipes:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const UserFavouriteRecipeList = async () => {
+    setLoading(true);
+    try {
+      const data = await getAllFavourites();
+      setRecipeList(data);
+    } catch (error: any) {
+      Alert.alert("Error", error?.message || "Failed to load favourites.");
+      console.log("Favourite fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View
@@ -47,22 +70,76 @@ const Cookbook = () => {
         Cravings
       </Text>
 
-      <FlatList data={recipeList}
-      numColumns={2}
-      refreshing={loading}
-      onRefresh={GetUserCreatedRecipes}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      renderItem={({item, index}) => (
-        <View style={{
-          flex: 1
-        }}>
-          <RecipeCard recipe={item} />
-        </View>
-      )}
+      <View
+        style={{ 
+          marginBottom: 6, 
+          marginTop: 6, 
+          gap: 10, 
+          justifyContent: 'space-around',
+          display: 'flex',
+          flexDirection: 'row',
+          backgroundColor: '#E5D3B7',
+          borderRadius: 8
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setActiveTab(1);
+            GetUserCreatedRecipes();
+          }}
+          style={[styles.tabContainer, { opacity: activeTab == 1 ? 1 : 0.4 }]}
+        >
+          <Ionicons name="sparkles" size={20} color="#4A3428" />
+          <Text style={styles.tabText}>My Kitchen</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            setActiveTab(2);
+            UserFavouriteRecipeList();
+          }}
+          style={[styles.tabContainer, { opacity: activeTab == 2 ? 1 : 0.4 }]}
+        >
+          <Ionicons name="heart" size={20} color="#4A3428" />
+          <Text style={styles.tabText}>My Cravings</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={recipeList}
+        numColumns={2}
+        refreshing={loading}
+        //{ opacity: activeTab == 1 ? 1 : 0.4 }
+        onRefresh={activeTab == 1 ? GetUserCreatedRecipes : UserFavouriteRecipeList}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item, index }) => (
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
+            <RecipeCard recipe={item} />
+          </View>
+        )}
       />
     </View>
-  )
-}
+  );
+};
 
-export default Cookbook
+const styles = StyleSheet.create({
+  tabContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    padding: 10,
+    borderRadius: 10,
+  },
+  tabText: {
+    fontFamily: "outfit-regular",
+    fontSize: 18,
+  },
+});
+
+export default Cookbook;

@@ -22,4 +22,5 @@ export interface Recipe {
   calories: number;
   cookTime: number;
   serveTo: number;
+  isSaved: boolean;
 }

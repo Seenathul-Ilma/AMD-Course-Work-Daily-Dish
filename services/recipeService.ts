@@ -28,6 +28,7 @@ export const addRecipe = async (
   await addDoc(recipeCollection, {
     ...recipe,
     recipeImage: recipeImage || "",
+    isSaved: false,
     userId: user.uid,
     createdAt: serverTimestamp(),
   });
@@ -62,7 +63,8 @@ export const getRecipesByCategory = async (category: string): Promise<Recipe[]> 
       cookTime: data.cookTime || 0,
       serveTo: data.serveTo || 0,
       createdAt: data.createdAt as string,
-      imagePrompt: data.imagePrompt as string || ''
+      imagePrompt: data.imagePrompt as string || '',
+      isSaved: data.isSaved || false
     } as Recipe
   })
 }
@@ -85,7 +87,8 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
         cookTime: data.cookTime || 0,
         serveTo: data.serveTo || 0,
         createdAt: data.createdAt as string,
-        imagePrompt: data.imagePrompt as string || ''
+        imagePrompt: data.imagePrompt as string || '',
+        isSaved: data.isSaved || false
       } as Recipe
     })
 }
@@ -114,7 +117,8 @@ export const getUserCreatedRecipes = async (): Promise<Recipe[]> => {
         cookTime: data.cookTime || 0,
         serveTo: data.serveTo || 0,
         createdAt: data.createdAt as string,
-        imagePrompt: data.imagePrompt as string || ''
+        imagePrompt: data.imagePrompt as string || '',
+        isSaved: data.isSaved || false
       } as Recipe
     })
 }
@@ -139,7 +143,8 @@ export const getLatestRecipes = async (recipeLimit: number): Promise<Recipe[]> =
         cookTime: data.cookTime || 0,
         serveTo: data.serveTo || 0,
         createdAt: data.createdAt as string,
-        imagePrompt: data.imagePrompt as string || ''
+        imagePrompt: data.imagePrompt as string || '',
+        isSaved: data.isSaved || false
       } as Recipe
     })
 }

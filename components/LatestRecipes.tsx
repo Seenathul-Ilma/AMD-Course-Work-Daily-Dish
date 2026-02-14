@@ -4,16 +4,16 @@ import { Recipe } from "@/types/recipe";
 import { getLatestRecipes } from "@/services/recipeService";
 import RecipeCardHome from "./RecipeCardHome";
 
-const LatestRecipes = () => {
-  const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(false);
+const LatestRecipes = ({recipes}: any) => {
+  //const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
+  //const [loading, setLoading] = useState(false);
   //console.log("Category Name: ", categoryName)
 
-  useEffect(() => {
+  /* useEffect(() => {
     GetLatestRecipes();
-  }, []);
+  }, []); */
 
-  const GetLatestRecipes = async () => {
+  /* const GetLatestRecipes = async () => {
     setLoading(true);
     try {
       let recipes: Recipe[] = [];
@@ -26,7 +26,7 @@ const LatestRecipes = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; */
 
   return (
     <View
@@ -37,7 +37,7 @@ const LatestRecipes = () => {
       <Text style={styles.title}>Latest Recipes</Text>
 
       <FlatList
-        data={latestRecipes}
+        data={recipes}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}

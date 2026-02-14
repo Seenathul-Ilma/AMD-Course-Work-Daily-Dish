@@ -1,22 +1,97 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { addToFavourite, removeFromFavouriteByRecipeId } from "@/services/userFavouriteService";
 
 const RecipeIntro = ({ recipe }: any) => {
+    const [addRecipeToFavourite, setAddRecipeToFavourite] = useState(recipe?.isSaved || false);
+
+   const AddToFavourites = async () => {
+    console.log(recipe?.id)
+  try {
+    if (!recipe?.id) {
+        //console.log(recipe.id)
+      Alert.alert("Error", "Recipe ID not found.");
+      return;
+    }
+
+    await addToFavourite(recipe.id);
+    Alert.alert("Added to your cravings..!");
+    setAddRecipeToFavourite(true)
+  } catch (error: any) {
+    Alert.alert("Error", error.message || "Failed to add to favourites.");
+  }
+};
+
+ const RemoveRecipeFromFavourites = async () => {
+    console.log(recipe?.id)
+  try {
+    if (!recipe?.id) {
+        //console.log(recipe.id)
+      Alert.alert("Error", "Recipe ID not found.");
+      return;
+    }
+
+    await removeFromFavouriteByRecipeId(recipe.id);
+    setAddRecipeToFavourite(false)
+  } catch (error: any) {
+    Alert.alert("Error", error.message || "Failed to add to favourites.");
+  }
+};
+
   return (
     <View>
-      <Image
+
+        
+            <View>
+            <Image
         source={{
-    uri: recipe?.recipeImage
-      ? recipe.recipeImage.replace("ai-guru-lab-images/", "ai-guru-lab-images%2f")
-      : recipe.recipeImage, // fallback image if undefined
-  }}
+          uri: recipe?.recipeImage.replace(
+            "ai-guru-lab-images/",
+            "ai-guru-lab-images%2f",
+          ),
+        }}
         style={{
           width: "100%",
           height: 240,
           borderRadius: 20,
         }}
       />
+      <LinearGradient 
+                colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.8)']}
+                style={{
+                    position: 'absolute',
+                    width: 50,
+                    borderRadius: 50,
+                    padding: 7,
+                    right: 10,
+                    bottom: 10
+                }}
+        >
+            <TouchableOpacity
+                      onPress={()=> !addRecipeToFavourite ? AddToFavourites() : RemoveRecipeFromFavourites()}
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {!addRecipeToFavourite ? <Ionicons
+                        name="heart"
+                        size={30}
+                        color="#FFFFFF"
+                      /> : <Ionicons
+                        name="heart"
+                        size={30}
+                        color="#ed1b2e"
+                      />}
+                    </TouchableOpacity>
+        </LinearGradient>
+            
+        </View>
+
+
+
       <Text
         style={{
           width: "100%",
