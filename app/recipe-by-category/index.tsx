@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Alert, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { getRecipesByCategory } from "@/services/recipeService";
 import { Recipe } from "@/types/recipe";
 import RecipeCard from "@/components/RecipeCard";
@@ -45,7 +45,6 @@ Alert.alert("Error", error?.message || "Something went wrong");
   }
 
 
-
   return (
     <View
       style={{
@@ -56,7 +55,7 @@ Alert.alert("Error", error?.message || "Something went wrong");
       }}
     >
       <TouchableOpacity
-        className="flex-row items-center mb-2 py-1 px-2 rounded-full self-start"
+        className="flex-row items-center mb-5 py-1 px-2 rounded-full self-start"
         style={{
           backgroundColor: "#E5D3B7",
           alignItems: "center",

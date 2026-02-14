@@ -1,10 +1,20 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react'
+import { useRouter } from 'expo-router';
 
 const RecipeCard = ({recipe}: any) => {
+    const router = useRouter()
+
   return (
-    <View style={{
+    <TouchableOpacity
+    onPress={()=>router.push({
+        pathname: '/recipe-detail',
+        params: {
+            recipeData: JSON.stringify(recipe)
+        }
+    })} 
+    style={{
         margin: 5
     }}>
       <Image source={{uri: recipe?.recipeImage}} 
@@ -37,7 +47,7 @@ const RecipeCard = ({recipe}: any) => {
       </View>
 </LinearGradient>
 
-    </View>
+    </TouchableOpacity>
   )
 }
 

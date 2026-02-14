@@ -1,10 +1,11 @@
 import { View } from "react-native";
-import { Slot, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { LoaderProvider } from "@/context/LoaderContext";
 import { AuthProvider } from "@/context/AuthContext";
+//import { Ionicons } from "@expo/vector-icons";
 
 const RootLayout = () => {
   const insets = useSafeAreaInsets();
@@ -30,12 +31,24 @@ const RootLayout = () => {
               
               {/* This turns the back arrow ON */}
               <Stack.Screen 
-                name="recipe-by-category/index" 
+                name="recipe-by-category" 
                 options={{ 
                   headerShown: false, 
                   headerTitle: '',         // Empty title for a clean look
                   headerTransparent: true, // Floats the arrow over your design
                   headerTintColor: '#4A3428'
+                }} 
+              />
+              <Stack.Screen 
+                name="recipe-detail" 
+                options={{ 
+                  headerShown: false, 
+                  headerTitle: '',         // Empty title for a clean look
+                  headerTransparent: true, // Floats the arrow over your design
+                  headerTintColor: '#4A3428',
+                  /* headerRight:()=>(
+                    <Ionicons name="share" size={24} color="black" />
+                  ) */
                 }} 
               />
             </Stack>
