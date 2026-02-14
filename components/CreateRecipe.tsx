@@ -1,6 +1,14 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 //import OpenAI from "openai"
 import RecipeGenerateBtn from "./RecipeGenerateBtn";
 
@@ -18,11 +26,21 @@ import { addRecipe } from "@/services/recipeService";
 const EXPO_PUBLIC_GEMINI_API_KEY = process.env
   .EXPO_PUBLIC_GEMINI_API_KEY as string;
 
-const EXPO_PUBLIC_AIGURULAB_API_KEY = process.env.EXPO_PUBLIC_AIGURULAB_API_KEY as string
+const EXPO_PUBLIC_AIGURULAB_API_KEY = process.env
+  .EXPO_PUBLIC_AIGURULAB_API_KEY as string;
 
-  const AIGURULAB_BASE_URL='https://aigurulab.tech';
+const AIGURULAB_BASE_URL = "https://aigurulab.tech";
 
-const CreateRecipe = () => {
+//const CreateRecipe = () => {
+type CreateRecipeProps = {
+  containerBg?: string;
+  inputBg?: string;
+};
+
+const CreateRecipe = ({
+  containerBg = "#FFF8F3",
+  inputBg = "#FFFFFF",
+}: CreateRecipeProps) => {
   const [userInputText, setUserInputText] = useState<string>();
   const { showLoader, hideLoader, isLoading } = useLoader();
   const [openLoading, setOpenLoading] = useState(false);
@@ -98,8 +116,8 @@ const CreateRecipe = () => {
   };
 
   const GenerateCompleteRecipe = async (option: any) => {
-    actionSheetRef.current?.hide()
-    setOpenLoading(true)
+    actionSheetRef.current?.hide();
+    setOpenLoading(true);
 
     const GENERATE_COMPLETE_RECIPE = recipePrompt.GENERATE_COMPLETE_RECIPE;
 
@@ -110,7 +128,16 @@ const CreateRecipe = () => {
         {
           contents: [
             {
-              parts: [{ text: "RecipeName:" + option?.recipeName + "Description:" + option?.description + GENERATE_COMPLETE_RECIPE }],
+              parts: [
+                {
+                  text:
+                    "RecipeName:" +
+                    option?.recipeName +
+                    "Description:" +
+                    option?.description +
+                    GENERATE_COMPLETE_RECIPE,
+                },
+              ],
             },
           ],
           generationConfig: {
@@ -142,11 +169,10 @@ const CreateRecipe = () => {
       const parsedContent: Recipe = JSON.parse(generatedContent);
       console.log("Parsed JSON: ", parsedContent);
 
-      console.log(parsedContent?.imagePrompt)
-      const imageUrl = await GenerateAiImage(parsedContent?.imagePrompt)
+      console.log(parsedContent?.imagePrompt);
+      const imageUrl = await GenerateAiImage(parsedContent?.imagePrompt);
 
-      const insertedRecordResult = await SaveToDb(parsedContent,imageUrl)
-
+      const insertedRecordResult = await SaveToDb(parsedContent, imageUrl);
     } catch (error: any) {
       if (error.response?.status === 429) {
         Alert.alert("Too many requests. Please wait a moment and try again.");
@@ -156,40 +182,41 @@ const CreateRecipe = () => {
 
       console.log("API Error:", error.response?.data || error.message);
     } finally {
-      setOpenLoading(false)
+      setOpenLoading(false);
     }
-
   };
 
-
-  const GenerateRecipeImage = async(imagePrompt: string) => await axios.post(AIGURULAB_BASE_URL+'/api/generate-image',
-        {
-            width: 1024,
-            height: 1024,
-            input: imagePrompt,
-            model: 'sdxl',//'flux'
-            aspectRatio:"1:1"//Applicable to Flux model only
+  const GenerateRecipeImage = async (imagePrompt: string) =>
+    await axios.post(
+      AIGURULAB_BASE_URL + "/api/generate-image",
+      {
+        width: 1024,
+        height: 1024,
+        input: imagePrompt,
+        model: "sdxl", //'flux'
+        aspectRatio: "1:1", //Applicable to Flux model only
+      },
+      {
+        headers: {
+          "x-api-key": EXPO_PUBLIC_AIGURULAB_API_KEY, // Your API Key
+          "Content-Type": "application/json", // Content Type
         },
-        {
-            headers: {
-                'x-api-key': EXPO_PUBLIC_AIGURULAB_API_KEY, // Your API Key
-                'Content-Type': 'application/json', // Content Type
-            },
-        })
+      },
+    );
 
-const GenerateAiImage= async (imagePrompt:string)=>{
-  const result = await GenerateRecipeImage(imagePrompt)
-  console.log(result.data.image) //Output Result: Base 64 Image
-  return result.data.image
-}
+  const GenerateAiImage = async (imagePrompt: string) => {
+    const result = await GenerateRecipeImage(imagePrompt);
+    console.log(result.data.image); //Output Result: Base 64 Image
+    return result.data.image;
+  };
 
-const SaveToDb = async (content:Recipe, imageUrl:string) => {
-  await addRecipe(content, imageUrl)
-  Alert.alert("Success", "Recipe added successfully")
-}
+  const SaveToDb = async (content: Recipe, imageUrl: string) => {
+    await addRecipe(content, imageUrl);
+    Alert.alert("Success", "Recipe added successfully");
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: containerBg }]}>
       <Image
         source={require("./../assets/images/fryingpan.png")}
         style={styles.panImage}
@@ -200,7 +227,7 @@ const SaveToDb = async (content:Recipe, imageUrl:string) => {
       <Text style={styles.subheading}>Make something for your LOVE</Text>
 
       <TextInput
-        style={styles.textInput}
+        style={[styles.textInput, { backgroundColor: inputBg }]}
         multiline={true}
         numberOfLines={3}
         placeholder="What you want to cook? Add ingredients etc.."
@@ -223,8 +250,10 @@ const SaveToDb = async (content:Recipe, imageUrl:string) => {
           <View>
             {generatedRecipeOptions.map((recipe: any, index: any) => (
               <TouchableOpacity
-              onPress={()=>GenerateCompleteRecipe(recipe)}
-              key={index} style={styles.recipeOptionContainer}>
+                onPress={() => GenerateCompleteRecipe(recipe)}
+                key={index}
+                style={styles.recipeOptionContainer}
+              >
                 <Text
                   style={{
                     fontFamily: "outfit-bold",

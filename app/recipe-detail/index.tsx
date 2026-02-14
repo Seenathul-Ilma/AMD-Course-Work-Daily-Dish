@@ -1,38 +1,53 @@
-import { View, Text, TouchableOpacity, Image, FlatList, Share } from 'react-native'
-import React, { useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
-import RecipeIntro from '@/components/RecipeIntro'
-import Ingredient from '@/components/Ingredient'
-import RecipeSteps from '@/components/RecipeSteps'
-import * as Print from 'expo-print';
-import { shareAsync } from 'expo-sharing';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  Share,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import React, { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import RecipeIntro from "@/components/RecipeIntro";
+import Ingredient from "@/components/Ingredient";
+import RecipeSteps from "@/components/RecipeSteps";
+import * as Print from "expo-print";
+import { shareAsync } from "expo-sharing";
+import CreateRecipe from "@/components/CreateRecipe";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 const generateRecipeHTML = (recipe: any) => {
   const ingredientsHtml = recipe.ingredients
-    .map((ing: any) => `
+    .map(
+      (ing: any) => `
       <tr>
         <td style="padding: 10px 0; border-bottom: 1px solid #F0E6D8; font-size: 14px;">${ing.icon}</td>
         <td style="padding: 10px 8px; border-bottom: 1px solid #F0E6D8; color: #4A3428; font-weight: 500; font-size: 14px;">${ing.ingredient}</td>
         <td style="padding: 10px 0; border-bottom: 1px solid #F0E6D8; text-align: right; color: #8B593E; font-size: 14px;">${ing.quantity}</td>
       </tr>
-    `)
-    .join('');
+    `,
+    )
+    .join("");
 
   const stepsHtml = recipe.steps
-    .map((step: any) => `
+    .map(
+      (step: any) => `
       <div style="margin-bottom: 14px; padding: 12px; background-color: #FFF8F3; border-left: 4px solid #E58C4F; border-radius: 4px; page-break-inside: avoid;">
         <span style="background-color: #E5D3B7; color: #4A3428; font-weight: bold; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; vertical-align: top;">
           ${step.step}
         </span>
         <span style="color: #666; line-height: 1.6; font-size: 14px; display: inline-block; width: calc(100% - 50px);">${step.instruction}</span>
       </div>
-    `)
-    .join('');
+    `,
+    )
+    .join("");
 
   const recipeImage = recipe.recipeImage.replace(
     "ai-guru-lab-images/",
-    "ai-guru-lab-images%2f"
+    "ai-guru-lab-images%2f",
   );
 
   return `
@@ -257,24 +272,24 @@ const generateRecipeHTML = (recipe: any) => {
 };
 
 const RecipeDetail = () => {
-    const {recipeData} = useLocalSearchParams()
-    const recipe = JSON.parse(recipeData as string)
-    const router = useRouter()
+  const { recipeData } = useLocalSearchParams();
+  const recipe = JSON.parse(recipeData as string);
+  const router = useRouter();
 
-    console.log('----', recipe)
+  console.log("----", recipe);
 
-      // 1. Share simple text to social media
+  // 1. Share simple text to social media
   const handleShareText = async () => {
-  try {
-    const ingredientsList = recipe.ingredients
-      .map((i: any) => `  • ${i.icon} ${i.ingredient} - ${i.quantity}`)
-      .join('\n');
+    try {
+      const ingredientsList = recipe.ingredients
+        .map((i: any) => `  • ${i.icon} ${i.ingredient} - ${i.quantity}`)
+        .join("\n");
 
-    const stepsList = recipe.steps
-      .map((s: any) => `  ${s.step}. ${s.instruction}`)
-      .join('\n\n');
+      const stepsList = recipe.steps
+        .map((s: any) => `  ${s.step}. ${s.instruction}`)
+        .join("\n\n");
 
-    const message = `
+      const message = `
 *${recipe.recipeName}*
 
 *Description*
@@ -295,17 +310,17 @@ Try this delicious recipe!
 Made with ❤️ from DailyDish
     `.trim();
 
-    await Share.share({ 
-      message,
-      title: `Check out: ${recipe.recipeName}`,
-      url: recipe.recipeImage
-    });
-  } catch (error: any) {
-    if (error?.message !== 'User did not share') {
-      console.error("Error sharing text:", error);
+      await Share.share({
+        message,
+        title: `Check out: ${recipe.recipeName}`,
+        url: recipe.recipeImage,
+      });
+    } catch (error: any) {
+      if (error?.message !== "User did not share") {
+        console.error("Error sharing text:", error);
+      }
     }
-  }
-};
+  };
 
   // 2. Open system print dialog
   const handlePrint = async () => {
@@ -317,96 +332,104 @@ Made with ❤️ from DailyDish
   const handleSharePDF = async () => {
     const html = generateRecipeHTML(recipe);
     const { uri } = await Print.printToFileAsync({ html });
-    await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
   };
 
   return (
     <FlatList
-        data={[]}
-        renderItem={() => null}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-            <View
-      style={{
-        padding: 20,
-        //paddingTop: insets.top + 60, // safe area + header height
-        backgroundColor: "#FFF8F3",
-        height: "100%",
-      }}
-    >
-      <View className="flex-row items-center justify-between mb-5">
-        <TouchableOpacity
-          className="flex-row items-center py-1 px-2 rounded-full"
+      data={[]}
+      renderItem={() => null}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={
+        <View
           style={{
-            backgroundColor: "#E5D3B7",
-            alignItems: "center",
+            padding: 20,
+            //paddingTop: insets.top + 60, // safe area + header height
+            backgroundColor: "#FFF8F3",
+            height: "100%",
           }}
-          onPress={() => router.back()}
         >
-          <View
-            className="mr-2 rounded-full"
-            style={{ backgroundColor: "#E5D3B7" }}
-          >
-            <Ionicons name="chevron-back" size={24} color="#4A3428" />
+          <View className="flex-row items-center justify-between mb-5">
+            <TouchableOpacity
+              className="flex-row items-center py-1 px-2 rounded-full"
+              style={{
+                backgroundColor: "#E5D3B7",
+                alignItems: "center",
+              }}
+              onPress={() => router.back()}
+            >
+              <View
+                className="mr-2 rounded-full"
+                style={{ backgroundColor: "#E5D3B7" }}
+              >
+                <Ionicons name="chevron-back" size={24} color="#4A3428" />
+              </View>
+              <Text
+                style={{
+                  fontFamily: "outfit-regular",
+                  color: "#4A3428",
+                  fontSize: 15,
+                  paddingRight: 8,
+                }}
+              >
+                Go Back
+              </Text>
+            </TouchableOpacity>
+
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              {/* Print Button */}
+              <TouchableOpacity
+                onPress={handlePrint}
+                style={{
+                  backgroundColor: "#E5D3B7",
+                  padding: 8,
+                  borderRadius: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons name="print-outline" size={22} color="#4A3428" />
+              </TouchableOpacity>
+
+              {/* Share PDF Button */}
+              <TouchableOpacity
+                onPress={handleSharePDF}
+                style={{
+                  backgroundColor: "#E5D3B7",
+                  padding: 8,
+                  borderRadius: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name="share-social-outline"
+                  size={22}
+                  color="#4A3428"
+                />
+              </TouchableOpacity>
+
+              {/* Quick Text Share Button */}
+              <TouchableOpacity
+                onPress={handleShareText}
+                style={{
+                  backgroundColor: "#E5D3B7",
+                  padding: 8,
+                  borderRadius: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name="chatbox-ellipses-outline"
+                  size={22}
+                  color="#4A3428"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <Text
-            style={{
-              fontFamily: "outfit-regular",
-              color: "#4A3428",
-              fontSize: 15,
-              paddingRight: 8,
-            }}
-          >
-            Go Back
-          </Text>
-        </TouchableOpacity>
-        
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-  {/* Print Button */}
-  <TouchableOpacity
-    onPress={handlePrint}
-    style={{
-      backgroundColor: "#E5D3B7",
-      padding: 8,
-      borderRadius: 50,
-      alignItems: "center",
-      justifyContent: "center"
-    }}
-  >
-    <Ionicons name="print-outline" size={22} color="#4A3428" />
-  </TouchableOpacity>
 
-  {/* Share PDF Button */}
-  <TouchableOpacity
-    onPress={handleSharePDF}
-    style={{
-      backgroundColor: "#E5D3B7",
-      padding: 8,
-      borderRadius: 50,
-      alignItems: "center",
-      justifyContent: "center"
-    }}
-  >
-    <Ionicons name="share-social-outline" size={22} color="#4A3428" />
-  </TouchableOpacity>
-
-  {/* Quick Text Share Button */}
-  <TouchableOpacity
-    onPress={handleShareText}
-    style={{
-      backgroundColor: "#E5D3B7",
-      padding: 8,
-      borderRadius: 50,
-      alignItems: "center",
-      justifyContent: "center"
-    }}
-  >
-    <Ionicons name="chatbox-ellipses-outline" size={22} color="#4A3428" />
-  </TouchableOpacity>
-</View>
-      </View>
-
-      {/* <Text
+          {/* <Text
         style={{
           fontFamily: "outfit-semibold",
           fontSize: 25,
@@ -416,13 +439,25 @@ Made with ❤️ from DailyDish
         Dish Secrets
       </Text> */}
 
-      <RecipeIntro recipe={recipe} />
-      <Ingredient ingredients={recipe?.ingredients} />
-      <RecipeSteps steps={recipe?.steps} />
-    </View>
-        }
-    />
-  )
-}
+          <RecipeIntro recipe={recipe} />
+          <Ingredient ingredients={recipe?.ingredients} />
+          <RecipeSteps steps={recipe?.steps} />
 
-export default RecipeDetail
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
+          >
+            <KeyboardAwareScrollView
+              keyboardDismissMode="on-drag"
+              showsVerticalScrollIndicator={false}
+            >
+              <CreateRecipe containerBg="#FFFFFF" inputBg="#FFF8F3" />
+            </KeyboardAwareScrollView>
+          </TouchableWithoutFeedback>
+        </View>
+      }
+    />
+  );
+};
+
+export default RecipeDetail;

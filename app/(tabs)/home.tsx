@@ -16,7 +16,12 @@ export default function Home() {
       <IntoHeader />
 
       {/* Recipe Generator UI */}
-      <CreateRecipe />
+      {/* <CreateRecipe /> */}
+      <CreateRecipe 
+  containerBg="#FFF8F3"
+  inputBg="#FFFFFF"
+/>
+
       
       {/* Category */}
       <CategoryList />
