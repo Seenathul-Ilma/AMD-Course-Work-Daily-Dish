@@ -7,11 +7,10 @@ const RecipeIntro = ({ recipe }: any) => {
     <View>
       <Image
         source={{
-          uri: recipe?.recipeImage.replace(
-            "ai-guru-lab-images/",
-            "ai-guru-lab-images%2f",
-          ),
-        }}
+    uri: recipe?.recipeImage
+      ? recipe.recipeImage.replace("ai-guru-lab-images/", "ai-guru-lab-images%2f")
+      : recipe.recipeImage, // fallback image if undefined
+  }}
         style={{
           width: "100%",
           height: 240,

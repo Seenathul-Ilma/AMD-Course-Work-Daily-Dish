@@ -443,6 +443,13 @@ Made with ❤️ from DailyDish
           <Ingredient ingredients={recipe?.ingredients} />
           <RecipeSteps steps={recipe?.steps} />
 
+            <Text style={{
+                marginTop: 15,
+                fontFamily: 'outfit-regular',
+                fontSize: 16,
+                textAlign: 'center',
+                color: 'gray'
+            }}>Ready to try another recipe?</Text>
           <TouchableWithoutFeedback
             onPress={Keyboard.dismiss}
             accessible={false}

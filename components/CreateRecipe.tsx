@@ -20,6 +20,7 @@ import { useLoader } from "@/hooks/useLoader";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import LoadingDialog from "./LoadingDialog";
 import { addRecipe } from "@/services/recipeService";
+import { useRouter } from "expo-router";
 
 //dotenv.config();
 
@@ -41,6 +42,7 @@ const CreateRecipe = ({
   containerBg = "#FFF8F3",
   inputBg = "#FFFFFF",
 }: CreateRecipeProps) => {
+  const router = useRouter()
   const [userInputText, setUserInputText] = useState<string>();
   const { showLoader, hideLoader, isLoading } = useLoader();
   const [openLoading, setOpenLoading] = useState(false);
@@ -173,6 +175,14 @@ const CreateRecipe = ({
       const imageUrl = await GenerateAiImage(parsedContent?.imagePrompt);
 
       const insertedRecordResult = await SaveToDb(parsedContent, imageUrl);
+
+      router.push({
+        pathname: '/recipe-detail',
+        params: {
+          recipeData: JSON.stringify(insertedRecordResult)
+        }
+      })
+
     } catch (error: any) {
       if (error.response?.status === 429) {
         Alert.alert("Too many requests. Please wait a moment and try again.");
@@ -211,8 +221,12 @@ const CreateRecipe = ({
   };
 
   const SaveToDb = async (content: Recipe, imageUrl: string) => {
-    await addRecipe(content, imageUrl);
+    const result = await addRecipe(content, imageUrl);
     Alert.alert("Success", "Recipe added successfully");
+    return {
+      ...content, 
+      recipeImage: imageUrl 
+    } // return the full object to pass to next page
   };
 
   return (
