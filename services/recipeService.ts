@@ -32,6 +32,41 @@ export const addRecipe = async (
   });
 };
 
+
+export const getRecipesByCategory = async (category: string): Promise<Recipe[]> => {
+  const q = query(
+    recipeCollection,
+    where('category', 'array-contains', category), 
+    orderBy('createdAt', 'desc')
+  )
+
+  const snapshot = await getDocs(q)
+
+  //You need composite index when you combine:
+    //where + orderBy
+    //multiple where conditions
+    //array-contains + anything else
+
+  return snapshot.docs.map(docSnap => {
+    const data = docSnap.data()
+    return {
+      id: docSnap.id,
+      recipeName: data.recipeName as string,     
+      description: data.description as string,
+      recipeImage: data.recipeImage as string,  
+      category: data.category as string[],
+      ingredients: data.ingredients || [],
+      steps: data.steps || [],
+      calories: data.calories || 0,
+      cookTime: data.cookTime || 0,
+      serveTo: data.serveTo || 0,
+      createdAt: data.createdAt as string,
+      imagePrompt: data.imagePrompt as string || ''
+    } as Recipe
+  })
+}
+
+
 /* export const addRecipe = async (
   recipeName: string,
   description: string,

@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 
@@ -20,7 +20,26 @@ const RootLayout = () => {
               backgroundColor: "#FFF8F3",
             }}
           >
-            <Slot />
+            {/* <Slot /> */}
+
+            {/* We hide the header for everything except the recipe list */}
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="(tabs)" />
+              
+              {/* This turns the back arrow ON */}
+              <Stack.Screen 
+                name="recipe-by-category/index" 
+                options={{ 
+                  headerShown: false, 
+                  headerTitle: '',         // Empty title for a clean look
+                  headerTransparent: true, // Floats the arrow over your design
+                  headerTintColor: '#4A3428'
+                }} 
+              />
+            </Stack>
+
           </View>
         </AuthProvider>
       </LoaderProvider>
