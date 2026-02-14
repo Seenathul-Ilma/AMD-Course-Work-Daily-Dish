@@ -46,7 +46,7 @@ const Ingredient = ({ ingredients }: any) => {
                         fontSize: 17,
                         padding: 5,
                         backgroundColor: '#E5D3B7',
-                        borderRadius: 99
+                        borderRadius: 10
                     }}>{item?.icon}</Text>
 
                     <Text style={{
