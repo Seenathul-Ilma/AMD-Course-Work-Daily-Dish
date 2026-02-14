@@ -1,34 +1,33 @@
-import RecipeCard from '@/components/RecipeCard';
-import { useAppNotification } from '@/hooks/useAppNotification';
-import { getAllRecipes } from '@/services/recipeService';
-import { Recipe } from '@/types/recipe';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import RecipeCard from "@/components/recipe/RecipeCard";
+import { useAppNotification } from "@/hooks/useAppNotification";
+import { getAllRecipes } from "@/services/recipeService";
+import { Recipe } from "@/types/recipe";
+import React, { useEffect, useState } from "react";
+import { FlatList, Text, View } from "react-native";
 
 const Explore = () => {
-  const [recipeList, setRecipeList] = useState<Recipe[]>([])
-  const [loading, setLoading] = useState(false)
+  const [recipeList, setRecipeList] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(false);
   const { showError } = useAppNotification();
   //console.log("Category Name: ", categoryName)
 
   useEffect(() => {
-    GetAllRecipes()
-  }, [])
+    GetAllRecipes();
+  }, []);
 
   const GetAllRecipes = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let recipes: Recipe[] = [];
       recipes = await getAllRecipes();
-      setRecipeList(recipes)
+      setRecipeList(recipes);
       //console.log(recipes)
     } catch (error: any) {
       showError("Error", error?.message || "Something went wrong");
-      console.error('Error fetching recipes:', error)
+      console.error("Error fetching recipes:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-
 
     /* try {
           let cats: Category[] = [];
@@ -40,8 +39,7 @@ const Explore = () => {
         } finally {
           hideLoader();
         } */
-
-  }
+  };
 
   return (
     <View
@@ -62,23 +60,26 @@ const Explore = () => {
         Explore
       </Text>
 
-      <FlatList data={recipeList}
+      <FlatList
+        data={recipeList}
         numColumns={2}
         refreshing={loading}
         onRefresh={GetAllRecipes}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
-          <View style={{
-            flex: 1,
-            marginTop: 5
-          }}>
+          <View
+            style={{
+              flex: 1,
+              marginTop: 5,
+            }}
+          >
             <RecipeCard recipe={item} />
           </View>
         )}
       />
     </View>
-  )
-}
+  );
+};
 
-export default Explore
+export default Explore;

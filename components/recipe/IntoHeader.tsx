@@ -55,7 +55,7 @@ const IntoHeader = () => {
         gap: 3
     }}>
         <Image 
-        source={isEnabled ? require('./../assets/images/veg.png') : require('./../assets/images/nonveg.png')}
+        source={isEnabled ? require('./../../assets/images/veg.png') : require('./../../assets/images/nonveg.png')}
         style={{
             width: 25,
             height: 25

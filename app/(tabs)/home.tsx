@@ -1,7 +1,7 @@
-import CategoryList from "@/components/CategoryList";
-import CreateRecipe from "@/components/CreateRecipe";
-import IntoHeader from "@/components/IntoHeader";
-import LatestRecipes from "@/components/LatestRecipes";
+import CategoryList from "@/components/recipe/CategoryList";
+import CreateRecipe from "@/components/recipe/CreateRecipe";
+import IntoHeader from "@/components/recipe/IntoHeader";
+import LatestRecipes from "@/components/recipe/LatestRecipes";
 import { useAppNotification } from "@/hooks/useAppNotification";
 import { getLatestRecipes } from "@/services/recipeService";
 import { Recipe } from "@/types/recipe";
@@ -30,10 +30,9 @@ export default function Home() {
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
-      console.log(latestRecipes)
+      console.log(latestRecipes);
     }
   };
-
 
   return (
     <FlatList

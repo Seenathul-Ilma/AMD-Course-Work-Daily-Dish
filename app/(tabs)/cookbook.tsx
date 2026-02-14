@@ -1,4 +1,4 @@
-import RecipeCard from "@/components/RecipeCard";
+import RecipeCard from "@/components/recipe/RecipeCard";
 import { useAppNotification } from "@/hooks/useAppNotification";
 import { getUserCreatedRecipes } from "@/services/recipeService";
 import { getAllFavourites } from "@/services/userFavouriteService";
@@ -13,14 +13,11 @@ import {
   View,
 } from "react-native";
 
-
-
 const Cookbook = () => {
   const [recipeList, setRecipeList] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const { showError } = useAppNotification();
-
 
   useEffect(() => {
     GetUserCreatedRecipes();
@@ -79,11 +76,11 @@ const Cookbook = () => {
           marginBottom: 6,
           marginTop: 8,
           gap: 10,
-          justifyContent: 'space-around',
-          display: 'flex',
-          flexDirection: 'row',
-          backgroundColor: '#E5D3B7',
-          borderRadius: 8
+          justifyContent: "space-around",
+          display: "flex",
+          flexDirection: "row",
+          backgroundColor: "#E5D3B7",
+          borderRadius: 8,
         }}
       >
         <TouchableOpacity
@@ -114,7 +111,9 @@ const Cookbook = () => {
         numColumns={2}
         refreshing={loading}
         //{ opacity: activeTab == 1 ? 1 : 0.4 }
-        onRefresh={activeTab == 1 ? GetUserCreatedRecipes : UserFavouriteRecipeList}
+        onRefresh={
+          activeTab == 1 ? GetUserCreatedRecipes : UserFavouriteRecipeList
+        }
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontFamily: "outfit-regular",
     fontSize: 18,
-    color: '#4A3428'
+    color: "#4A3428",
   },
 });
 

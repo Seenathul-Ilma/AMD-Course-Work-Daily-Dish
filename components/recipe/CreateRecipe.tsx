@@ -42,7 +42,7 @@ const CreateRecipe = ({
   containerBg = "#FFF8F3",
   inputBg = "#FFFFFF",
 }: CreateRecipeProps) => {
-  const router = useRouter()
+  const router = useRouter();
   const [userInputText, setUserInputText] = useState<string>();
   const [isGenerating, setIsGenerating] = useState(false);
   const { showLoader, hideLoader, isLoading } = useLoader();
@@ -108,7 +108,10 @@ const CreateRecipe = ({
       actionSheetRef.current?.show();
     } catch (error: any) {
       if (error.response?.status === 429) {
-        showError("Limit Reached", "Too many requests. Please wait a moment and try again.");
+        showError(
+          "Limit Reached",
+          "Too many requests. Please wait a moment and try again.",
+        );
       } else {
         showError("Error", "Something went wrong. Please try again.");
       }
@@ -179,15 +182,17 @@ const CreateRecipe = ({
       const insertedRecordResult = await SaveToDb(parsedContent, imageUrl);
 
       router.push({
-        pathname: '/recipe-detail',
+        pathname: "/recipe-detail",
         params: {
-          recipeData: JSON.stringify(insertedRecordResult)
-        }
-      })
-
+          recipeData: JSON.stringify(insertedRecordResult),
+        },
+      });
     } catch (error: any) {
       if (error.response?.status === 429) {
-        showError("Limit Reached", "Too many requests. Please wait a moment and try again.");
+        showError(
+          "Limit Reached",
+          "Too many requests. Please wait a moment and try again.",
+        );
       } else {
         showError("Error", "Something went wrong. Please try again.");
       }
@@ -227,14 +232,14 @@ const CreateRecipe = ({
     showSuccess("Success", "Recipe added successfully");
     return {
       ...content,
-      recipeImage: imageUrl
-    } // return the full object to pass to next page
+      recipeImage: imageUrl,
+    }; // return the full object to pass to next page
   };
 
   return (
     <View style={[styles.container, { backgroundColor: containerBg }]}>
       <Image
-        source={require("./../assets/images/fryingpan.png")}
+        source={require("./../../assets/images/fryingpan.png")}
         style={styles.panImage}
       />
       <Text style={styles.heading}>
@@ -256,7 +261,7 @@ const CreateRecipe = ({
         onPress={() => onGenerateRecipe()}
         isLoading={isGenerating}
         icon={"sparkles"}
-      //disabled={isLoading}
+        //disabled={isLoading}
       />
 
       <LoadingDialog visible={openLoading} />
@@ -335,7 +340,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     padding: 10,
     textAlignVertical: "top",
-    color: '#4A3428'
+    color: "#4A3428",
   },
   actionSheetContainer: {
     padding: 25,

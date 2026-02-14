@@ -1,22 +1,21 @@
+import CreateRecipe from "@/components/recipe/CreateRecipe";
+import Ingredient from "@/components/recipe/Ingredient";
+import RecipeIntro from "@/components/recipe/RecipeIntro";
+import RecipeSteps from "@/components/recipe/RecipeSteps";
+import { Ionicons } from "@expo/vector-icons";
+import * as Print from "expo-print";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { shareAsync } from "expo-sharing";
+import React from "react";
 import {
-  View,
+  FlatList,
+  Keyboard,
+  Share,
   Text,
   TouchableOpacity,
-  Image,
-  FlatList,
-  Share,
   TouchableWithoutFeedback,
-  Keyboard,
+  View,
 } from "react-native";
-import React, { useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import RecipeIntro from "@/components/RecipeIntro";
-import Ingredient from "@/components/Ingredient";
-import RecipeSteps from "@/components/RecipeSteps";
-import * as Print from "expo-print";
-import { shareAsync } from "expo-sharing";
-import CreateRecipe from "@/components/CreateRecipe";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 const generateRecipeHTML = (recipe: any) => {
@@ -272,7 +271,7 @@ const generateRecipeHTML = (recipe: any) => {
 };
 
 const RecipeDetail = () => {
-      const router = useRouter();
+  const router = useRouter();
   const { recipeData } = useLocalSearchParams();
   const recipe = JSON.parse(recipeData as string);
 

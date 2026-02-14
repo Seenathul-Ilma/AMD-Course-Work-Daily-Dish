@@ -28,7 +28,6 @@ const LatestRecipes = ({ recipes }: any) => {
     }
   }; */
 
-
   return (
     <View
       style={{
