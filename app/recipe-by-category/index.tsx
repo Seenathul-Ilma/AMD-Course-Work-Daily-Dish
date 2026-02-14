@@ -91,9 +91,14 @@ Alert.alert("Error", error?.message || "Something went wrong");
       </Text>
 
       <FlatList data={recipeList}
+      numColumns={2}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       renderItem={({item, index}) => (
-        <View>
-          <RecipeCard />
+        <View style={{
+          flex: 1
+        }}>
+          <RecipeCard recipe={item} />
         </View>
       )}
       />
