@@ -1,11 +1,18 @@
-import { ScrollView } from 'react-native'
+import { FlatList, ScrollView } from 'react-native'
 import React from 'react'
 import IntoHeader from '@/components/IntoHeader'
 import CreateRecipe from '@/components/CreateRecipe'
 import CategoryList from '@/components/CategoryList'
+import LatestRecipes from '@/components/LatestRecipes'
 
 export default function Home() {
   return (
+    <FlatList
+    data={[]}
+    renderItem={()=>null}
+    showsVerticalScrollIndicator={false}
+    showsHorizontalScrollIndicator={false}
+    ListHeaderComponent={
     <ScrollView style={{
       height: '100%',
       backgroundColor: '#FFFFFF',
@@ -26,7 +33,10 @@ export default function Home() {
       {/* Category */}
       <CategoryList />
 
+      <LatestRecipes />
+
     </ScrollView>
+    } />
   )
 }
 

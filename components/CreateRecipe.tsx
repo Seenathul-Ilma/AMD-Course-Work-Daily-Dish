@@ -12,15 +12,15 @@ import {
 //import OpenAI from "openai"
 import RecipeGenerateBtn from "./RecipeGenerateBtn";
 
-import recipePrompt from "@/services/generateRecipePrompts";
-import { RecipeOption } from "@/types/recipeOption";
-import { Recipe } from "@/types/recipe";
 import { useLoader } from "@/hooks/useLoader";
+import recipePrompt from "@/services/generateRecipePrompts";
+import { Recipe } from "@/types/recipe";
+import { RecipeOption } from "@/types/recipeOption";
 
-import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
-import LoadingDialog from "./LoadingDialog";
 import { addRecipe } from "@/services/recipeService";
 import { useRouter } from "expo-router";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import LoadingDialog from "./LoadingDialog";
 
 //dotenv.config();
 
@@ -44,6 +44,7 @@ const CreateRecipe = ({
 }: CreateRecipeProps) => {
   const router = useRouter()
   const [userInputText, setUserInputText] = useState<string>();
+  const [isGenerating, setIsGenerating] = useState(false);
   const { showLoader, hideLoader, isLoading } = useLoader();
   const [openLoading, setOpenLoading] = useState(false);
   const [generatedRecipeOptions, setGeneratedRecipeOptions] = useState<any>([]);
@@ -57,11 +58,11 @@ const CreateRecipe = ({
       return;
     }
 
-    if (isLoading) {
+    if (isGenerating) {
       return;
     }
 
-    showLoader();
+    setIsGenerating(true);
 
     try {
       // Call Gemini API
@@ -113,7 +114,7 @@ const CreateRecipe = ({
 
       console.log("API Error:", error.response?.data || error.message);
     } finally {
-      hideLoader();
+      setIsGenerating(false);
     }
   };
 
@@ -224,8 +225,8 @@ const CreateRecipe = ({
     const result = await addRecipe(content, imageUrl);
     Alert.alert("Success", "Recipe added successfully");
     return {
-      ...content, 
-      recipeImage: imageUrl 
+      ...content,
+      recipeImage: imageUrl
     } // return the full object to pass to next page
   };
 
@@ -250,11 +251,11 @@ const CreateRecipe = ({
 
       <RecipeGenerateBtn
         //label={"Generate Recipe"}
-        label={isLoading ? "Generating..." : "Generate Recipe"}
+        label={isGenerating ? "Generating..." : "Generate Recipe"}
         onPress={() => onGenerateRecipe()}
-        isLoading={isLoading}
+        isLoading={isGenerating}
         icon={"sparkles"}
-        //disabled={isLoading}
+      //disabled={isLoading}
       />
 
       <LoadingDialog visible={openLoading} />
@@ -333,6 +334,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     padding: 10,
     textAlignVertical: "top",
+    color: '#4A3428'
   },
   actionSheetContainer: {
     padding: 25,

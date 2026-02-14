@@ -1,13 +1,12 @@
-import { useLoader } from "@/hooks/useLoader";
 import { getAllCategories } from "@/services/categoryService";
 import { Category } from "@/types/category";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,20 +15,20 @@ import {
 
 const CategoryList = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const { showLoader, hideLoader } = useLoader();
+  const [loading, setLoading] = useState(true);
   const router = useRouter()
 
   const fetchCategories = async () => {
-    showLoader();
+    setLoading(true);
     try {
       let cats: Category[] = [];
       cats = await getAllCategories();
       setCategories(cats);
     } catch (error) {
-      Alert.alert("Error", "Error fetching tasks");
+      Alert.alert("Error", "Error fetching categories");
       //console.error('Error fetching categories:', error)
     } finally {
-      hideLoader();
+      setLoading(false);
     }
   };
 
@@ -40,42 +39,50 @@ const CategoryList = () => {
   return (
     <View
       style={{
-        marginTop: 15,
+        marginTop: 20,
       }}
     >
       <Text style={styles.title}>Categories</Text>
-      <FlatList
-        data={categories}
-        numColumns={4}
-        renderItem={({ item }) => (
-          <TouchableOpacity 
-          onPress={() => router.push({
-            pathname:'/recipe-by-category',
-            params:{
-              categoryName: item?.name
-            }
-          })} 
-          style={styles.categoryCard}>
-            <Image
-              source={{ uri: item.photoURL }}
-              style={{
-                width: 40,
-                height: 40,
-              }}
-            />
-            <Text
-              style={{
-                fontFamily: "outfit-regular",
-                color: "#4A3428",
-                marginTop: 3,
-                fontSize: 13,
-              }}
-            >
-              {item.name}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
+
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#8B593E" />
+        </View>
+      ) : (
+        <FlatList
+          data={categories}
+          numColumns={4}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => router.push({
+                pathname: '/recipe-by-category',
+                params: {
+                  categoryName: item?.name
+                }
+              })}
+              style={styles.categoryCard}>
+              <Image
+                source={{ uri: item.photoURL }}
+                style={{
+                  width: 50,
+                  height: 50,
+                }}
+              />
+              <Text
+                style={{
+                  fontFamily: "outfit-regular",
+                  color: "#4A3428",
+                  marginTop: 3,
+                  fontSize: 14,
+                }}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -90,8 +97,13 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
+  loadingContainer: {
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default CategoryList;

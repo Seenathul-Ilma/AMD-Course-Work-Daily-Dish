@@ -1,13 +1,78 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import RecipeCard from '@/components/RecipeCard'
+import { useRouter } from 'expo-router';
+import { Recipe } from '@/types/recipe';
+import { getAllRecipes } from '@/services/recipeService';
 
 const Explore = () => {
+    const [recipeList, setRecipeList] = useState<Recipe[]>([])
+    const [loading, setLoading] = useState(false)
+    //console.log("Category Name: ", categoryName)
+  
+    useEffect(() => {
+      GetAllRecipes()
+    }, [])
+  
+    const GetAllRecipes = async () => {
+      setLoading(true)
+      try{
+        let recipes: Recipe[] = [];
+        recipes = await getAllRecipes();
+        setRecipeList(recipes)
+        //console.log(recipes)
+      } catch (error: any) {
+  Alert.alert("Error", error?.message || "Something went wrong");
+            console.error('Error fetching recipes:', error)
+          } finally {
+            setLoading(false)
+          }
+  
+      /* try {
+            let cats: Category[] = [];
+            cats = await getAllCategories();
+            setCategories(cats);
+          } catch (error) {
+            Alert.alert("Error", "Error fetching tasks");
+            //console.error('Error fetching categories:', error)
+          } finally {
+            hideLoader();
+          } */
+    }
+
   return (
-    <View style={{
-      height: '100%',
-      backgroundColor: '#FFF8F3'
-    }}>
-      <Text>Explore</Text>
+    <View
+      style={{
+        padding: 20,
+        //paddingTop: insets.top + 60, // safe area + header height
+        backgroundColor: "#FFF8F3",
+        height: "100%",
+      }}
+    >
+      <Text
+        style={{
+          fontFamily: "outfit-semibold",
+          fontSize: 25,
+          color: "#4A3428",
+        }}
+      >
+        Explore
+      </Text>
+
+      <FlatList data={recipeList}
+      numColumns={2}
+      refreshing={loading}
+      onRefresh={GetAllRecipes}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      renderItem={({item, index}) => (
+        <View style={{
+          flex: 1
+        }}>
+          <RecipeCard recipe={item} />
+        </View>
+      )}
+      />
     </View>
   )
 }

@@ -10,6 +10,7 @@ const RecipeByCategory = () => {
   const router = useRouter();
   const { categoryName } = useLocalSearchParams();
   const [recipeList, setRecipeList] = useState<Recipe[]>([])
+  const [loading, setLoading] = useState(false)
   //console.log("Category Name: ", categoryName)
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const RecipeByCategory = () => {
   }, [])
 
   const GetRecipeListByCategory = async () => {
-    
+    setLoading(true)
     try{
       let recipes: Recipe[] = [];
       recipes = await getRecipesByCategory(categoryName as string);
@@ -28,8 +29,7 @@ const RecipeByCategory = () => {
 Alert.alert("Error", error?.message || "Something went wrong");
           console.error('Error fetching categories:', error)
         } finally {
-          //hideLoader();
-          console.log("I'm from finally block")
+          setLoading(false)
         }
 
     /* try {
@@ -91,6 +91,8 @@ Alert.alert("Error", error?.message || "Something went wrong");
 
       <FlatList data={recipeList}
       numColumns={2}
+      refreshing={loading}
+      onRefresh={GetRecipeListByCategory}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       renderItem={({item, index}) => (
