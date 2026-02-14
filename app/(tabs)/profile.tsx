@@ -38,8 +38,6 @@ const Profile = () => {
     try {
       await logoutUser()
       showSuccess("Logged Out", "See you again soon!")
-      // Since AuthContext handles state, the root layout will automatically redirect if configured,
-      // but router.replace ensures we go back to login immediately.
       router.replace('/(auth)/login')
     } catch (error: any) {
       showError("Logout Failed", error.message)
