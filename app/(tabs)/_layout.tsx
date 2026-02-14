@@ -4,7 +4,7 @@ import useFont from "@/hooks/useFont";
 
 const tabs = [
   { name: "home", icon: "home", title: "Home" },
-  { name: "cookbook", icon: "restaurant", title: "Meals" },
+  { name: "cookbook", icon: "restaurant", title: "Cravings" },
   { name: "explore", icon: "search", title: "Explore" },
   { name: "profile", icon: "person", title: "You" },
 ] as const

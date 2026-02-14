@@ -197,7 +197,7 @@ const CreateRecipe = ({
     }
   };
 
-  const GenerateRecipeImage = async (imagePrompt: string) =>
+  const GenerateRecipeImageByAiGurulab = async (imagePrompt: string) =>
     await axios.post(
       AIGURULAB_BASE_URL + "/api/generate-image",
       {
@@ -209,14 +209,14 @@ const CreateRecipe = ({
       },
       {
         headers: {
-          "x-api-key": EXPO_PUBLIC_AIGURULAB_API_KEY, // Your API Key
+          "x-api-key": EXPO_PUBLIC_AIGURULAB_API_KEY, // API Key
           "Content-Type": "application/json", // Content Type
         },
       },
     );
 
   const GenerateAiImage = async (imagePrompt: string) => {
-    const result = await GenerateRecipeImage(imagePrompt);
+    const result = await GenerateRecipeImageByAiGurulab(imagePrompt);
     console.log(result.data.image); //Output Result: Base 64 Image
     return result.data.image;
   };
