@@ -1,15 +1,17 @@
-import { Alert, FlatList, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
-import IntoHeader from "@/components/IntoHeader";
-import CreateRecipe from "@/components/CreateRecipe";
 import CategoryList from "@/components/CategoryList";
+import CreateRecipe from "@/components/CreateRecipe";
+import IntoHeader from "@/components/IntoHeader";
 import LatestRecipes from "@/components/LatestRecipes";
-import { Recipe } from "@/types/recipe";
+import { useAppNotification } from "@/hooks/useAppNotification";
 import { getLatestRecipes } from "@/services/recipeService";
+import { Recipe } from "@/types/recipe";
+import React, { useEffect, useState } from "react";
+import { FlatList, ScrollView } from "react-native";
 
 export default function Home() {
   const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
+  const { showError } = useAppNotification();
   //console.log("Category Name: ", categoryName)
 
   useEffect(() => {
@@ -24,13 +26,14 @@ export default function Home() {
       setLatestRecipes(recipes);
       //console.log(recipes)
     } catch (error: any) {
-      Alert.alert("Error", error?.message || "Something went wrong");
+      showError("Error", error?.message || "Something went wrong");
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
       console.log(latestRecipes)
     }
   };
+
 
   return (
     <FlatList

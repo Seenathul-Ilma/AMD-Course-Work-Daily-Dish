@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Recipe } from "@/types/recipe";
-import { getLatestRecipes } from "@/services/recipeService";
+import { useAppNotification } from "@/hooks/useAppNotification";
+import React from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import RecipeCardHome from "./RecipeCardHome";
 
-const LatestRecipes = ({recipes}: any) => {
+const LatestRecipes = ({ recipes }: any) => {
+  const { showError } = useAppNotification();
   //const [latestRecipes, setLatestRecipes] = useState<Recipe[]>([]);
   //const [loading, setLoading] = useState(false);
   //console.log("Category Name: ", categoryName)
@@ -21,12 +21,13 @@ const LatestRecipes = ({recipes}: any) => {
       setLatestRecipes(recipes);
       //console.log(recipes)
     } catch (error: any) {
-      Alert.alert("Error", error?.message || "Something went wrong");
+      showError("Error", error?.message || "Something went wrong");
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
     }
   }; */
+
 
   return (
     <View

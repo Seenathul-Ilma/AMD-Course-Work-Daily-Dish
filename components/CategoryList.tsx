@@ -1,10 +1,10 @@
+import { useAppNotification } from "@/hooks/useAppNotification";
 import { getAllCategories } from "@/services/categoryService";
 import { Category } from "@/types/category";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -17,6 +17,7 @@ const CategoryList = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter()
+  const { showError } = useAppNotification();
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -25,9 +26,10 @@ const CategoryList = () => {
       cats = await getAllCategories();
       setCategories(cats);
     } catch (error) {
-      Alert.alert("Error", "Error fetching categories");
+      showError("Error", "Error fetching categories");
       //console.error('Error fetching categories:', error)
     } finally {
+
       setLoading(false);
     }
   };

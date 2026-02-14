@@ -1,3 +1,4 @@
+import { useAppNotification } from "@/hooks/useAppNotification";
 import useFont from "@/hooks/useFont";
 import { useLoader } from "@/hooks/useLoader";
 import { login } from "@/services/authService";
@@ -5,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  Alert,
   Image,
   Keyboard,
   Text,
@@ -28,10 +28,11 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { showLoader, hideLoader, isLoading } = useLoader();
+  const { showSuccess, showError } = useAppNotification();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password");
+      showError("Error", "Please enter email and password");
       return;
     }
 
@@ -43,15 +44,16 @@ const Login = () => {
 
     try {
       await login(email, password);
-      Alert.alert("Login Success..!");
+      showSuccess("Success", "Login Success..!");
       router.replace("/home")
     } catch (e) {
       console.error(e);
-      Alert.alert("Login failed. Please try again.");
+      showError("Login Failed", "Please try again.");
     } finally {
       hideLoader();
     }
   };
+
 
   return (
     <>

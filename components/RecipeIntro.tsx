@@ -1,94 +1,97 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import React, { useState } from "react";
+import { useAppNotification } from "@/hooks/useAppNotification";
+import { addToFavourite, removeFromFavouriteByRecipeId } from "@/services/userFavouriteService";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { addToFavourite, removeFromFavouriteByRecipeId } from "@/services/userFavouriteService";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const RecipeIntro = ({ recipe }: any) => {
-    const [addRecipeToFavourite, setAddRecipeToFavourite] = useState(recipe?.isSaved || false);
+  const [addRecipeToFavourite, setAddRecipeToFavourite] = useState(recipe?.isSaved || false);
+  const { showSuccess, showError } = useAppNotification();
 
-   const AddToFavourites = async () => {
+  const AddToFavourites = async () => {
     console.log(recipe?.id)
-  try {
-    if (!recipe?.id) {
+    try {
+      if (!recipe?.id) {
         //console.log(recipe.id)
-      Alert.alert("Error", "Recipe ID not found.");
-      return;
+        showError("Error", "Recipe ID not found.");
+        return;
+      }
+
+      await addToFavourite(recipe.id);
+      showSuccess("Success", "Added to your cravings..!");
+      setAddRecipeToFavourite(true)
+    } catch (error: any) {
+      showError("Error", error.message || "Failed to add to favourites.");
     }
+  };
 
-    await addToFavourite(recipe.id);
-    Alert.alert("Added to your cravings..!");
-    setAddRecipeToFavourite(true)
-  } catch (error: any) {
-    Alert.alert("Error", error.message || "Failed to add to favourites.");
-  }
-};
-
- const RemoveRecipeFromFavourites = async () => {
+  const RemoveRecipeFromFavourites = async () => {
     console.log(recipe?.id)
-  try {
-    if (!recipe?.id) {
+    try {
+      if (!recipe?.id) {
         //console.log(recipe.id)
-      Alert.alert("Error", "Recipe ID not found.");
-      return;
-    }
+        showError("Error", "Recipe ID not found.");
+        return;
+      }
 
-    await removeFromFavouriteByRecipeId(recipe.id);
-    setAddRecipeToFavourite(false)
-  } catch (error: any) {
-    Alert.alert("Error", error.message || "Failed to add to favourites.");
-  }
-};
+      await removeFromFavouriteByRecipeId(recipe.id);
+      setAddRecipeToFavourite(false)
+    } catch (error: any) {
+      showError("Error", error.message || "Failed to add to favourites.");
+    }
+  };
+
 
   return (
     <View>
 
-        
-            <View>
-            <Image
-        source={{
-          uri: recipe?.recipeImage.replace(
-            "ai-guru-lab-images/",
-            "ai-guru-lab-images%2f",
-          ),
-        }}
-        style={{
-          width: "100%",
-          height: 240,
-          borderRadius: 20,
-        }}
-      />
-      <LinearGradient 
-                colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.8)']}
-                style={{
-                    position: 'absolute',
-                    width: 50,
-                    borderRadius: 50,
-                    padding: 7,
-                    right: 10,
-                    bottom: 10
-                }}
+
+      <View>
+        <Image
+          source={{
+            uri: recipe?.recipeImage.replace(
+              "ai-guru-lab-images/",
+              "ai-guru-lab-images%2f",
+            ),
+          }}
+          style={{
+            width: "100%",
+            height: 240,
+            borderRadius: 20,
+          }}
+        />
+        <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.8)']}
+          style={{
+            position: 'absolute',
+            width: 50,
+            borderRadius: 50,
+            padding: 7,
+            right: 10,
+            bottom: 10
+          }}
         >
-            <TouchableOpacity
-                      onPress={()=> !addRecipeToFavourite ? AddToFavourites() : RemoveRecipeFromFavourites()}
-                      style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {!addRecipeToFavourite ? <Ionicons
-                        name="heart"
-                        size={30}
-                        color="#FFFFFF"
-                      /> : <Ionicons
-                        name="heart"
-                        size={30}
-                        color="#ed1b2e"
-                      />}
-                    </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => !addRecipeToFavourite ? AddToFavourites() : RemoveRecipeFromFavourites()}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {!addRecipeToFavourite ? <Ionicons
+              name="heart"
+              size={30}
+              color="#FFFFFF"
+            /> : <Ionicons
+              name="heart"
+              size={30}
+              color="#ed1b2e"
+            />}
+          </TouchableOpacity>
         </LinearGradient>
-            
-        </View>
+
+      </View>
 
 
 
@@ -186,16 +189,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   mainText: {
-                fontFamily: "outfit-regular",
-                fontSize: 16,
-                color: "#8B593E",
-              },
-              subText: {
-                fontFamily: "outfit-regular",
-                fontSize: 14,
-                color: "gray",
-                textAlign: 'center'
-              }
+    fontFamily: "outfit-regular",
+    fontSize: 16,
+    color: "#8B593E",
+  },
+  subText: {
+    fontFamily: "outfit-regular",
+    fontSize: 14,
+    color: "gray",
+    textAlign: 'center'
+  }
 });
 
 export default RecipeIntro;

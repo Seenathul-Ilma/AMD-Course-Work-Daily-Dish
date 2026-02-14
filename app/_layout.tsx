@@ -1,11 +1,13 @@
-import { View } from "react-native";
 import { Stack } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View } from "react-native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { LoaderProvider } from "@/context/LoaderContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { LoaderProvider } from "@/context/LoaderContext";
 //import { Ionicons } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
+
 
 const RootLayout = () => {
   const insets = useSafeAreaInsets();
@@ -28,36 +30,38 @@ const RootLayout = () => {
               <Stack.Screen name="index" />
               <Stack.Screen name="(auth)" />
               <Stack.Screen name="(tabs)" />
-              
+
               {/* This turns the back arrow ON */}
-              <Stack.Screen 
-                name="recipe-by-category" 
-                options={{ 
-                  headerShown: false, 
+              <Stack.Screen
+                name="recipe-by-category"
+                options={{
+                  headerShown: false,
                   headerTitle: '',         // Empty title for a clean look
                   headerTransparent: true, // Floats the arrow over your design
                   headerTintColor: '#4A3428'
-                }} 
+                }}
               />
-              <Stack.Screen 
-                name="recipe-detail" 
-                options={{ 
-                  headerShown: false, 
+              <Stack.Screen
+                name="recipe-detail"
+                options={{
+                  headerShown: false,
                   headerTitle: '',         // Empty title for a clean look
                   headerTransparent: true, // Floats the arrow over your design
                   headerTintColor: '#4A3428',
                   /* headerRight:()=>(
                     <Ionicons name="share" size={24} color="black" />
                   ) */
-                }} 
+                }}
               />
             </Stack>
 
           </View>
         </AuthProvider>
       </LoaderProvider>
+      <Toast />
     </KeyboardProvider>
   );
 };
+
 
 export default RootLayout;

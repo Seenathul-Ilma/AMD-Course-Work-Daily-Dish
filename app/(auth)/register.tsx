@@ -1,20 +1,20 @@
+import { useAppNotification } from "@/hooks/useAppNotification";
+import useFont from "@/hooks/useFont";
+import { useLoader } from "@/hooks/useLoader";
+import { registerUser } from "@/services/authService";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
 import {
-  View,
+  Image,
+  Keyboard,
+  Pressable,
   Text,
   TextInput,
-  Pressable,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-  Image,
+  View,
 } from "react-native";
-import React, { useState } from "react";
-import { useRouter } from "expo-router";
-import { registerUser } from "@/services/authService";
-import { useLoader } from "@/hooks/useLoader";
-import useFont from "@/hooks/useFont";
-import { Ionicons } from "@expo/vector-icons";
 import {
   KeyboardAwareScrollView,
   KeyboardToolbar,
@@ -32,34 +32,36 @@ const Register = () => {
   const [showConPassword, setShowConPassword] = useState(false);
 
   const { showLoader, hideLoader, isLoading } = useLoader();
+  const { showSuccess, showError } = useAppNotification();
 
   const handleRegister = async () => {
     if (!name || !email || !password || !conPassword) {
-      Alert.alert("Please fill all fields...!");
+      showError("Error", "Please fill all fields...!");
       return;
     }
 
     if (password !== conPassword) {
-      Alert.alert("Password do not match...!");
+      showError("Error", "Password do not match...!");
       return;
     }
 
     if (isLoading || !fontsLoaded) {
       return;
     }
-    
+
     showLoader();
     try {
       await registerUser(name, email, password);
-      Alert.alert("Account created..!");
+      showSuccess("Success", "Account created..!");
       router.replace("/login");
     } catch (e) {
       console.error(e);
-      Alert.alert("Register fail..!");
+      showError("Error", "Register fail..!");
     } finally {
       hideLoader();
     }
   };
+
 
   return (
     <>
@@ -185,9 +187,8 @@ const Register = () => {
             <Pressable
               onPress={handleRegister}
               disabled={isLoading}
-              className={`bg-[#8B593E] py-4 rounded-lg mt-2 mb-7 ${
-                isLoading ? "opacity-70" : ""
-              }`}
+              className={`bg-[#8B593E] py-4 rounded-lg mt-2 mb-7 ${isLoading ? "opacity-70" : ""
+                }`}
               style={({ pressed }) => ({
                 opacity: pressed && !isLoading ? 0.8 : 1,
               })}

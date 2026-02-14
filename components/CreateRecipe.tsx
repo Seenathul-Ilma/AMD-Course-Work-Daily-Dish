@@ -1,7 +1,7 @@
+import { useAppNotification } from "@/hooks/useAppNotification";
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import {
-  Alert,
   Image,
   StyleSheet,
   Text,
@@ -48,13 +48,14 @@ const CreateRecipe = ({
   const { showLoader, hideLoader, isLoading } = useLoader();
   const [openLoading, setOpenLoading] = useState(false);
   const [generatedRecipeOptions, setGeneratedRecipeOptions] = useState<any>([]);
+  const { showSuccess, showError } = useAppNotification();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const onGenerateRecipe = async () => {
     const GENERATE_OPTION_PROMPT = recipePrompt.GENERATE_OPTION_PROMPT;
 
     if (!userInputText || userInputText.trim() == "") {
-      Alert.alert("Please enter your ingredients..!");
+      showError("Input Required", "Please enter your ingredients..!");
       return;
     }
 
@@ -96,7 +97,7 @@ const CreateRecipe = ({
       //console.log("Trimmed: " + generatedContent.trim());
 
       if (!generatedContent) {
-        Alert.alert("No recipe generated.");
+        showError("Generation Failed", "No recipe generated.");
         return;
       }
 
@@ -107,9 +108,9 @@ const CreateRecipe = ({
       actionSheetRef.current?.show();
     } catch (error: any) {
       if (error.response?.status === 429) {
-        Alert.alert("Too many requests. Please wait a moment and try again.");
+        showError("Limit Reached", "Too many requests. Please wait a moment and try again.");
       } else {
-        Alert.alert("Something went wrong. Please try again.");
+        showError("Error", "Something went wrong. Please try again.");
       }
 
       console.log("API Error:", error.response?.data || error.message);
@@ -165,7 +166,7 @@ const CreateRecipe = ({
       //console.log("Trimmed: " + generatedContent.trim());
 
       if (!generatedContent) {
-        Alert.alert("No recipe generated.");
+        showError("Generation Failed", "No recipe generated.");
         return;
       }
 
@@ -186,9 +187,9 @@ const CreateRecipe = ({
 
     } catch (error: any) {
       if (error.response?.status === 429) {
-        Alert.alert("Too many requests. Please wait a moment and try again.");
+        showError("Limit Reached", "Too many requests. Please wait a moment and try again.");
       } else {
-        Alert.alert("Something went wrong. Please try again.");
+        showError("Error", "Something went wrong. Please try again.");
       }
 
       console.log("API Error:", error.response?.data || error.message);
@@ -223,7 +224,7 @@ const CreateRecipe = ({
 
   const SaveToDb = async (content: Recipe, imageUrl: string) => {
     const result = await addRecipe(content, imageUrl);
-    Alert.alert("Success", "Recipe added successfully");
+    showSuccess("Success", "Recipe added successfully");
     return {
       ...content,
       recipeImage: imageUrl

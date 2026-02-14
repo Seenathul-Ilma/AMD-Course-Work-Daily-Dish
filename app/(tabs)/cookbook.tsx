@@ -1,22 +1,26 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import React, { useEffect, useState } from "react";
 import RecipeCard from "@/components/RecipeCard";
-import { Recipe } from "@/types/recipe";
-import { getAllRecipes, getUserCreatedRecipes } from "@/services/recipeService";
-import { Ionicons } from "@expo/vector-icons";
+import { useAppNotification } from "@/hooks/useAppNotification";
+import { getUserCreatedRecipes } from "@/services/recipeService";
 import { getAllFavourites } from "@/services/userFavouriteService";
+import { Recipe } from "@/types/recipe";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+
 
 const Cookbook = () => {
   const [recipeList, setRecipeList] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
+  const { showError } = useAppNotification();
+
 
   useEffect(() => {
     GetUserCreatedRecipes();
@@ -31,7 +35,7 @@ const Cookbook = () => {
       setRecipeList(recipes);
       //console.log(recipes)
     } catch (error: any) {
-      Alert.alert("Error", error?.message || "Something went wrong");
+      showError("Error", error?.message || "Something went wrong");
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
@@ -44,7 +48,7 @@ const Cookbook = () => {
       const data = await getAllFavourites();
       setRecipeList(data);
     } catch (error: any) {
-      Alert.alert("Error", error?.message || "Failed to load favourites.");
+      showError("Error", error?.message || "Failed to load favourites.");
       console.log("Favourite fetch error:", error);
     } finally {
       setLoading(false);
@@ -71,10 +75,10 @@ const Cookbook = () => {
       </Text>
 
       <View
-        style={{ 
-          marginBottom: 6, 
-          marginTop: 6, 
-          gap: 10, 
+        style={{
+          marginBottom: 6,
+          marginTop: 8,
+          gap: 10,
           justifyContent: 'space-around',
           display: 'flex',
           flexDirection: 'row',
@@ -139,6 +143,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontFamily: "outfit-regular",
     fontSize: 18,
+    color: '#4A3428'
   },
 });
 

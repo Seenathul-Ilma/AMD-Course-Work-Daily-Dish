@@ -1,16 +1,18 @@
-import { View, Text, TouchableOpacity, Alert, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import RecipeCard from "@/components/RecipeCard";
+import { useAppNotification } from "@/hooks/useAppNotification";
 import { getRecipesByCategory } from "@/services/recipeService";
 import { Recipe } from "@/types/recipe";
-import RecipeCard from "@/components/RecipeCard";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 const RecipeByCategory = () => {
   const router = useRouter();
   const { categoryName } = useLocalSearchParams();
   const [recipeList, setRecipeList] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(false)
+  const { showError } = useAppNotification();
   //console.log("Category Name: ", categoryName)
 
   useEffect(() => {
@@ -19,29 +21,31 @@ const RecipeByCategory = () => {
 
   const GetRecipeListByCategory = async () => {
     setLoading(true)
-    try{
+    try {
       let recipes: Recipe[] = [];
       recipes = await getRecipesByCategory(categoryName as string);
       console.log(`Recipes from ${categoryName} collection: `, recipes.length)
       setRecipeList(recipes)
       //console.log(recipes)
     } catch (error: any) {
-Alert.alert("Error", error?.message || "Something went wrong");
-          console.error('Error fetching categories:', error)
-        } finally {
-          setLoading(false)
-        }
+      showError("Error", error?.message || "Something went wrong");
+      console.error('Error fetching categories:', error)
+    } finally {
+
+      setLoading(false)
+    }
 
     /* try {
           let cats: Category[] = [];
           cats = await getAllCategories();
           setCategories(cats);
         } catch (error) {
-          Alert.alert("Error", "Error fetching tasks");
+          showError("Error", "Error fetching tasks");
           //console.error('Error fetching categories:', error)
         } finally {
           hideLoader();
         } */
+
   }
 
 
@@ -90,18 +94,18 @@ Alert.alert("Error", error?.message || "Something went wrong");
       </Text>
 
       <FlatList data={recipeList}
-      numColumns={2}
-      refreshing={loading}
-      onRefresh={GetRecipeListByCategory}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      renderItem={({item, index}) => (
-        <View style={{
-          flex: 1
-        }}>
-          <RecipeCard recipe={item} />
-        </View>
-      )}
+        numColumns={2}
+        refreshing={loading}
+        onRefresh={GetRecipeListByCategory}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item, index }) => (
+          <View style={{
+            flex: 1
+          }}>
+            <RecipeCard recipe={item} />
+          </View>
+        )}
       />
     </View>
   );
