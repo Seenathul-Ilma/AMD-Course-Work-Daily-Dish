@@ -35,7 +35,7 @@ const RecipeIntro = ({ recipe }: any) => {
       <Text
         style={{
           fontFamily: "outfit-bold",
-          fontSize: 17,
+          fontSize: 18,
           marginTop: 10,
           color: "#4A3428",
         }}

@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import RecipeIntro from '@/components/RecipeIntro'
+import Ingredient from '@/components/Ingredient'
 
 const RecipeDetail = () => {
     const {recipeData} = useLocalSearchParams()
@@ -10,7 +11,12 @@ const RecipeDetail = () => {
     const router = useRouter()
     console.log('----', recipe)
   return (
-    <View
+    <FlatList
+        data={[]}
+        renderItem={() => null}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+            <View
       style={{
         padding: 20,
         //paddingTop: insets.top + 60, // safe area + header height
@@ -73,7 +79,10 @@ const RecipeDetail = () => {
       </Text> */}
 
       <RecipeIntro recipe={recipe} />
+      <Ingredient ingredients={recipe?.ingredients} />
     </View>
+        }
+    />
   )
 }
 
