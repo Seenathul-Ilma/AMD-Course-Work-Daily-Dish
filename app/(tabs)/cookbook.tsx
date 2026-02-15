@@ -21,7 +21,7 @@ const Cookbook = () => {
 
   useEffect(() => {
     GetUserCreatedRecipes();
-    UserFavouriteRecipeList();
+    //UserFavouriteRecipeList();
   }, []);
 
   const GetUserCreatedRecipes = async () => {

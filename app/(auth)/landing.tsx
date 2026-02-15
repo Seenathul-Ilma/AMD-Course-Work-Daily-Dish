@@ -103,7 +103,7 @@ export default function Landing() {
             textAlign: "center",
           }}
         >
-          Daily Dish | Find, Create & Enjoy Delicious Recipes
+          Daily Dish | Cook Smarter
         </Text>
 
         <Text
@@ -118,7 +118,7 @@ export default function Landing() {
           Generate delicious recipes in seconds with the power of AI
         </Text>
 
-        <View className="bg-[#8B593E] py-3 rounded-3xl mt-7 mb-7">
+        <View className="gap-1">
           <TouchableOpacity
             onPress={() => {
               router.push("/register");
@@ -126,8 +126,19 @@ export default function Landing() {
           >
             <Text style={{
             fontFamily: "outfit-semibold"
-          }} className="text-white text-lg text-center">
+          }} className="text-white text-lg text-center bg-[#8B593E] py-3 rounded-3xl mt-5">
               Get Started
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/login");
+            }}
+          >
+            <Text style={{
+            fontFamily: "outfit-semibold"
+          }} className="text-white text-lg text-center bg-[#8B593E] py-3 rounded-3xl mt-2">
+              Sign In
             </Text>
           </TouchableOpacity>
         </View>

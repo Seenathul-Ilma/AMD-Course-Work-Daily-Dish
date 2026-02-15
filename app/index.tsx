@@ -19,7 +19,7 @@ const Index = () => {
     return <Redirect href="/home" />
   } else {
     //return <Redirect href="/login" />
-    return <Redirect href="/login" />
+    return <Redirect href="/landing" />
   }
 }
 

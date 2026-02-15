@@ -43,7 +43,8 @@ const Profile = () => {
     try {
       await logoutUser()
       showSuccess("Logged Out", "See you again soon!")
-      router.replace('/(auth)/login')
+      //router.replace('/(auth)/login')
+      router.replace('/(auth)/landing')
     } catch (error: any) {
       showError("Logout Failed", error.message)
     }
@@ -92,6 +93,7 @@ const Profile = () => {
 
     setUploading(true)
     try {
+      //const imageUrl = await uploadToCloudinary(uri, user.uid)
       const imageUrl = await uploadToCloudinary(uri)
       await updateUserProfileImage(user.uid, imageUrl)
       showSuccess("Success", "Profile image updated!")
