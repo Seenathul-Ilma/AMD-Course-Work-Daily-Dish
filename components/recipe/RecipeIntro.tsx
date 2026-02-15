@@ -1,4 +1,5 @@
 import { useAppNotification } from "@/hooks/useAppNotification";
+import { getCurrentUserData } from "@/services/authService";
 import { addToFavourite, removeFromFavouriteByRecipeId } from "@/services/userFavouriteService";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,8 +7,24 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const RecipeIntro = ({ recipe }: any) => {
-  const [addRecipeToFavourite, setAddRecipeToFavourite] = useState(recipe?.isSaved || false);
+  const [addRecipeToFavourite, setAddRecipeToFavourite] = useState(false);
   const { showSuccess, showError } = useAppNotification();
+
+  React.useEffect(() => {
+    checkIfFavourite();
+  }, [recipe?.id]);
+
+  const checkIfFavourite = async () => {
+    if (!recipe?.id) return;
+    try {
+      const userData = await getCurrentUserData();
+      if (userData && userData.userFavourites) {
+        setAddRecipeToFavourite(userData.userFavourites.includes(recipe.id));
+      }
+    } catch (error) {
+      console.error("Error checking favourite status:", error);
+    }
+  };
 
   const AddToFavourites = async () => {
     console.log(recipe?.id)
@@ -23,6 +40,7 @@ const RecipeIntro = ({ recipe }: any) => {
       setAddRecipeToFavourite(true)
     } catch (error: any) {
       showError("Error", error.message || "Failed to add to favourites.");
+      console.log("Error: ", error.message)
     }
   };
 

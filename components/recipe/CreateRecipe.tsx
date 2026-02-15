@@ -67,7 +67,7 @@ const CreateRecipe = ({
 
     try {
       // Call Gemini API
-      const aiResponse = await axios.post(
+      /* const aiResponse = await axios.post(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
         {
           contents: [
@@ -91,7 +91,26 @@ const CreateRecipe = ({
       const generatedContent =
         aiResponse.data?.candidates?.[0]?.content?.[0]?.text ||
         aiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "No description generated";
+        "No description generated"; */
+
+        const generatedContent = `[
+  {
+    "recipeName": "Spicy Garlic Chicken 🍗",
+    "description": "A quick and tasty chicken recipe with garlic and chili. Perfect for dinner in under 30 minutes.",
+    "ingredients": ["chicken", "garlic", "chili flakes", "olive oil", "soy sauce"]
+  },
+  {
+    "recipeName": "Creamy Mushroom Pasta 🍄",
+    "description": "Rich and creamy pasta with mushrooms and herbs. Ideal for a cozy meal at home.",
+    "ingredients": ["pasta", "mushrooms", "cream", "parmesan", "garlic"]
+  },
+  {
+    "recipeName": "Vegetable Stir-Fry Delight 🥦",
+    "description": "A colorful stir-fry with fresh veggies and soy sauce. Quick and healthy for lunch or dinner.",
+    "ingredients": ["broccoli", "bell peppers", "carrots", "soy sauce", "sesame seeds"]
+  }
+]
+`
 
       //console.log("Original: " + generatedContent);
       //console.log("Trimmed: " + generatedContent.trim());
@@ -129,7 +148,7 @@ const CreateRecipe = ({
     const GENERATE_COMPLETE_RECIPE = recipePrompt.GENERATE_COMPLETE_RECIPE;
 
     try {
-      // Call Gemini API
+      /* // Call Gemini API
       const aiResponse = await axios.post(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
         {
@@ -163,7 +182,32 @@ const CreateRecipe = ({
       const generatedContent: any =
         aiResponse.data?.candidates?.[0]?.content?.[0]?.text ||
         aiResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "No description generated";
+        "No description generated"; */
+
+        const generatedContent = `{
+  "recipeName": "Spicy Garlic Chicken 🍗",
+  "description": "A quick and tasty chicken recipe with garlic and chili. Perfect for dinner in under 30 minutes.",
+  "category": ["Dinner"],
+  "ingredients": [
+    {"icon":"🍗","ingredient":"chicken","quantity":"500g"},
+    {"icon":"🧄","ingredient":"garlic","quantity":"3 cloves"},
+    {"icon":"🌶️","ingredient":"chili flakes","quantity":"1 tsp"},
+    {"icon":"🫒","ingredient":"olive oil","quantity":"2 tbsp"},
+    {"icon":"🥢","ingredient":"soy sauce","quantity":"2 tbsp"}
+  ],
+  "steps": [
+    {"step":1,"instruction":"Cut the chicken into bite-sized pieces."},
+    {"step":2,"instruction":"Heat olive oil in a pan and sauté garlic until fragrant."},
+    {"step":3,"instruction":"Add chicken and cook until lightly browned."},
+    {"step":4,"instruction":"Sprinkle chili flakes and pour soy sauce. Stir well."},
+    {"step":5,"instruction":"Cook until chicken is fully done and serve hot."}
+  ],
+  "calories": 450,
+  "cookTime": 25,
+  "serveTo": 2,
+  "imagePrompt": "A professional food photo of Spicy Garlic Chicken, plated elegantly on a white plate with fresh herbs garnish, rich colors, glistening chicken, overhead camera angle, soft natural lighting, kitchen background."
+}
+`
 
       console.log("Original: " + generatedContent);
       //console.log("Trimmed: " + generatedContent.trim());

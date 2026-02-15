@@ -1,5 +1,5 @@
 export interface Ingredient {
-  icon: string;        
+  icon: string;
   ingredient: string;  // "Eggs"
   quantity: string;    // "2 large"
 }
@@ -22,5 +22,5 @@ export interface Recipe {
   calories: number;
   cookTime: number;
   serveTo: number;
-  isSaved: boolean;
+
 }

@@ -1,20 +1,16 @@
+import { db } from "@/config/firebase";
+import { Recipe } from "@/types/recipe";
 import { getAuth } from "firebase/auth";
 import {
   addDoc,
   collection,
-  deleteDoc,
-  doc,
-  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
   serverTimestamp,
-  updateDoc,
-  where,
+  where
 } from "firebase/firestore";
-import { db } from "@/config/firebase";
-import { Recipe } from "@/types/recipe";
 const auth = getAuth();
 const recipeCollection = collection(db, "recipe");
 
@@ -28,7 +24,6 @@ export const addRecipe = async (
   await addDoc(recipeCollection, {
     ...recipe,
     recipeImage: recipeImage || "",
-    isSaved: false,
     userId: user.uid,
     createdAt: serverTimestamp(),
   });
@@ -38,24 +33,47 @@ export const addRecipe = async (
 export const getRecipesByCategory = async (category: string): Promise<Recipe[]> => {
   const q = query(
     recipeCollection,
-    where('category', 'array-contains', category), 
+    where('category', 'array-contains', category),
     orderBy('createdAt', 'desc')
   )
 
   const snapshot = await getDocs(q)
 
   //You need composite index when you combine:
-    //where + orderBy
-    //multiple where conditions
-    //array-contains + anything else
+  //where + orderBy
+  //multiple where conditions
+  //array-contains + anything else
 
   return snapshot.docs.map(docSnap => {
     const data = docSnap.data()
     return {
       id: docSnap.id,
-      recipeName: data.recipeName as string,     
+      recipeName: data.recipeName as string,
       description: data.description as string,
-      recipeImage: data.recipeImage as string,  
+      recipeImage: data.recipeImage as string,
+      category: data.category as string[],
+      ingredients: data.ingredients || [],
+      steps: data.steps || [],
+      calories: data.calories || 0,
+      cookTime: data.cookTime || 0,
+      serveTo: data.serveTo || 0,
+      createdAt: data.createdAt as string,
+      imagePrompt: data.imagePrompt as string || '',
+    } as Recipe
+  })
+}
+
+export const getAllRecipes = async (): Promise<Recipe[]> => {
+  const q = query(recipeCollection, orderBy('createdAt', 'desc'))
+
+  const snapshot = await getDocs(q)
+  return snapshot.docs.map(docSnap => {
+    const data = docSnap.data()
+    return {
+      id: docSnap.id,
+      recipeName: data.recipeName as string,
+      description: data.description as string,
+      recipeImage: data.recipeImage as string,
       category: data.category as string[],
       ingredients: data.ingredients || [],
       steps: data.steps || [],
@@ -69,32 +87,8 @@ export const getRecipesByCategory = async (category: string): Promise<Recipe[]> 
   })
 }
 
-export const getAllRecipes = async (): Promise<Recipe[]> => {
-    const q = query(recipeCollection, orderBy('createdAt', 'desc'))
-
-    const snapshot = await getDocs(q)
-    return snapshot.docs.map(docSnap => {
-      const data = docSnap.data()
-      return {
-        id: docSnap.id,
-        recipeName: data.recipeName as string,     
-        description: data.description as string,
-        recipeImage: data.recipeImage as string,  
-        category: data.category as string[],
-        ingredients: data.ingredients || [],
-        steps: data.steps || [],
-        calories: data.calories || 0,
-        cookTime: data.cookTime || 0,
-        serveTo: data.serveTo || 0,
-        createdAt: data.createdAt as string,
-        imagePrompt: data.imagePrompt as string || '',
-        isSaved: data.isSaved || false
-      } as Recipe
-    })
-}
-
 export const getUserCreatedRecipes = async (): Promise<Recipe[]> => {
-   const user = auth.currentUser
+  const user = auth.currentUser
   if (!user) throw new Error('User not authenticated.')
 
   const q = query(
@@ -102,51 +96,51 @@ export const getUserCreatedRecipes = async (): Promise<Recipe[]> => {
     where('userId', '==', user.uid),
     orderBy('createdAt', 'desc'))
 
-    const snapshot = await getDocs(q)
-    return snapshot.docs.map(docSnap => {
-      const data = docSnap.data()
-      return {
-        id: docSnap.id,
-        recipeName: data.recipeName as string,     
-        description: data.description as string,
-        recipeImage: data.recipeImage as string,  
-        category: data.category as string[],
-        ingredients: data.ingredients || [],
-        steps: data.steps || [],
-        calories: data.calories || 0,
-        cookTime: data.cookTime || 0,
-        serveTo: data.serveTo || 0,
-        createdAt: data.createdAt as string,
-        imagePrompt: data.imagePrompt as string || '',
-        isSaved: data.isSaved || false
-      } as Recipe
-    })
+  const snapshot = await getDocs(q)
+  return snapshot.docs.map(docSnap => {
+    const data = docSnap.data()
+    return {
+      id: docSnap.id,
+      recipeName: data.recipeName as string,
+      description: data.description as string,
+      recipeImage: data.recipeImage as string,
+      category: data.category as string[],
+      ingredients: data.ingredients || [],
+      steps: data.steps || [],
+      calories: data.calories || 0,
+      cookTime: data.cookTime || 0,
+      serveTo: data.serveTo || 0,
+      createdAt: data.createdAt as string,
+      imagePrompt: data.imagePrompt as string || '',
+      isSaved: data.isSaved || false
+    } as Recipe
+  })
 }
 
 export const getLatestRecipes = async (recipeLimit: number): Promise<Recipe[]> => {
-    const q = query(recipeCollection, orderBy('createdAt', 'desc'),
+  const q = query(recipeCollection, orderBy('createdAt', 'desc'),
     limit(recipeLimit)
   )
 
-    const snapshot = await getDocs(q)
-    return snapshot.docs.map(docSnap => {
-      const data = docSnap.data()
-      return {
-        id: docSnap.id,
-        recipeName: data.recipeName as string,     
-        description: data.description as string,
-        recipeImage: data.recipeImage as string,  
-        category: data.category as string[],
-        ingredients: data.ingredients || [],
-        steps: data.steps || [],
-        calories: data.calories || 0,
-        cookTime: data.cookTime || 0,
-        serveTo: data.serveTo || 0,
-        createdAt: data.createdAt as string,
-        imagePrompt: data.imagePrompt as string || '',
-        isSaved: data.isSaved || false
-      } as Recipe
-    })
+  const snapshot = await getDocs(q)
+  return snapshot.docs.map(docSnap => {
+    const data = docSnap.data()
+    return {
+      id: docSnap.id,
+      recipeName: data.recipeName as string,
+      description: data.description as string,
+      recipeImage: data.recipeImage as string,
+      category: data.category as string[],
+      ingredients: data.ingredients || [],
+      steps: data.steps || [],
+      calories: data.calories || 0,
+      cookTime: data.cookTime || 0,
+      serveTo: data.serveTo || 0,
+      createdAt: data.createdAt as string,
+      imagePrompt: data.imagePrompt as string || '',
+      isSaved: data.isSaved || false
+    } as Recipe
+  })
 }
 
 
