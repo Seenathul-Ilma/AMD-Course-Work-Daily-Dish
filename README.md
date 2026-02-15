@@ -2,7 +2,7 @@
 
 **Daily Dish** is a comprehensive, AI-integrated mobile application designed to revolutionize the home cooking experience. Built with **Expo** and **React Native**, it serves as a powerful recipe finder and meal planner that leverages cutting-edge technology to inspire culinary creativity.
 
-[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://expo.dev/artifacts/eas/uKKbYpHm4TqkLLH9nsF1ED.apk)
+[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://expo.dev/artifacts/eas/6LviZHyzLhd58aef2gPUs7.apk)
 
 ---
 
@@ -106,7 +106,7 @@ Daily Dish is optimized for live testing on physical devices using **Expo Go**.
 
 You can download the latest Android build of **Daily Dish** directly from the link below:
 
-**[Download Android APK (Direct Link)](https://expo.dev/artifacts/eas/uKKbYpHm4TqkLLH9nsF1ED.apk)**
+**[Download Android APK (Direct Link)](https://expo.dev/artifacts/eas/6LviZHyzLhd58aef2gPUs7.apk)**
 
 *(Note: You may need to enable "Install from Unknown Sources" on your Android settings to install the APK.)*
 
