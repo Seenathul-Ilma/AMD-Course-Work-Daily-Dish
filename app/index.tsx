@@ -18,8 +18,8 @@ const Index = () => {
     //return <Redirect href="/landing" />
     return <Redirect href="/home" />
   } else {
+    return <Redirect href="/landing" />   // Send them to /landing first so they see your high-quality intro
     //return <Redirect href="/login" />
-    return <Redirect href="/login" />
   }
 }
 
