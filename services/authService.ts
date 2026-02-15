@@ -1,7 +1,7 @@
 import { auth, db } from "@/config/firebase"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc, updateDoc } from "firebase/firestore"
 
 export const login = async (email: string, password: string) => {
     return await signInWithEmailAndPassword(auth, email, password)
@@ -37,6 +37,17 @@ export const registerUser = async (
         createdAt: new Date()
     })
     return userCredential.user
+}
+
+export const updateUserProfileImage = async (userId: string, imageUrl: string) => {
+    // 1. Update the 'users' collection in Firestore
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, { profileImage: imageUrl });
+    
+    // 2. Update the Firebase Auth profile (for the current session)
+    if (auth.currentUser) {
+        await updateProfile(auth.currentUser, { photoURL: imageUrl });
+    }
 }
 
 export const logoutUser = async () => {
