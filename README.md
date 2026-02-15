@@ -2,7 +2,7 @@
 
 **Daily Dish** is a comprehensive, AI-integrated mobile application designed to revolutionize the home cooking experience. Built with **Expo** and **React Native**, it serves as a powerful recipe finder and meal planner that leverages cutting-edge technology to inspire culinary creativity.
 
-[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://expo.dev/artifacts/eas/6LviZHyzLhd58aef2gPUs7.apk)
+[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://expo.dev/artifacts/eas/uVkG7SCyYvJthYn68gavXv.apk)
 
 ---
 
@@ -23,6 +23,45 @@
   - Modern, responsive design using **NativeWind (Tailwind CSS)**.
   - Smooth navigation and transitions powered by **Expo Router**.
   - Dynamic loading states and interactive components.
+
+---
+
+## 📸 Screenshots
+
+### ✨ Getting Started
+| Landing Page | Sign Up | Sign In |
+|:---:|:---:|:---:|
+| <img src="assets/screenshots/0.jpg" width="200" /> | <img src="assets/screenshots/1.jpg" width="200" /> | <img src="assets/screenshots/2.jpg" width="200" /> |
+
+### 🍴 Explore & Discover
+| Home Screen | Categories | Discovery | Explore |
+|:---:|:---:|:---:|:---:|
+| <img src="assets/screenshots/2.1.jpg" width="200" /> | <img src="assets/screenshots/2.2.jpg" width="200" /> | <img src="assets/screenshots/3.jpg" width="200" /> | <img src="assets/screenshots/16.jpg" width="200" /> |
+
+### 🧑‍🍳 AI Kitchen Assistant
+| Input Prompt | Generation | Review | Recipe Detail | Cooking Steps |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/screenshots/4.jpg" width="200" /> | <img src="assets/screenshots/5.jpg" width="200" /> | <img src="assets/screenshots/6.jpg" width="200" /> | <img src="assets/screenshots/7.jpg" width="200" /> | <img src="assets/screenshots/8.jpg" width="200" /> |
+
+### 📄 Recipe Export & Sharing
+| Export Options | PDF Preview | Share Dialog | Success State |
+|:---:|:---:|:---:|:---:|
+| <img src="assets/screenshots/9.jpg" width="200" /> | <img src="assets/screenshots/10.jpg" width="200" /> | <img src="assets/screenshots/10.1.jpg" width="200" /> | <img src="assets/screenshots/10.2.jpeg" width="200" /> |
+
+### 🔥 Trending Recipes
+<p align="center">
+  <img src="assets/screenshots/11.jpg" width="250" />
+</p>
+
+### 📖 Your Culinary Collection
+| My Kitchen | My Cravings | Saved List | Favorites |
+|:---:|:---:|:---:|:---:|
+| <img src="assets/screenshots/12.jpg" width="200" /> | <img src="assets/screenshots/13.jpg" width="200" /> | <img src="assets/screenshots/14.jpg" width="200" /> | <img src="assets/screenshots/15.jpg" width="200" /> |
+
+### 👤 Profile & Settings
+| Profile View | Settings |
+|:---:|:---:|
+| <img src="assets/screenshots/17.jpg" width="200" /> | <img src="assets/screenshots/18.jpg" width="200" /> |
 
 ---
 
@@ -108,7 +147,7 @@ Daily Dish is optimized for live testing on physical devices using **Expo Go**.
 
 You can download the latest Android build of **Daily Dish** directly from the link below:
 
-**[Download Android APK (Direct Link)](https://expo.dev/artifacts/eas/6LviZHyzLhd58aef2gPUs7.apk)**
+**[Download Android APK (Direct Link)](https://expo.dev/artifacts/eas/uVkG7SCyYvJthYn68gavXv.apk)**
 
 *(Note: You may need to enable "Install from Unknown Sources" on your Android settings to install the APK.)*
 
